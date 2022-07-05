@@ -16,25 +16,33 @@ import java.util.stream.Collectors;
 @RestController
 public class BookInfoController {
     private BookInfoRepo bookInfoRepo;
-    private BookInfoEntityAssembler bookInfoEntityAssembler;
+    private BookEntityFactory bookEntityFactory;
+    //private BookInfoEntityAssembler bookInfoEntityAssembler;
+    private  BookDTOFactory bookDTOFactory;
 
-    public BookInfoController(BookInfoRepo bookInfoRepo, BookInfoEntityAssembler bookInfoEntityAssembler) {
+    public BookInfoController(BookInfoRepo bookInfoRepo, BookEntityFactory bookEntityFactory, BookDTOFactory bookDTOFactory) {
         this.bookInfoRepo = bookInfoRepo;
-        this.bookInfoEntityAssembler = bookInfoEntityAssembler;
+        this.bookEntityFactory = bookEntityFactory;
+        this.bookDTOFactory = bookDTOFactory;
     }
 
     // 3 GET methods and 1 of other CRUD methods.
 
+//    @GetMapping("/books")
+//    public CollectionModel<EntityModel<BookInfo>> getAllBooks(){
+//        List<EntityModel<BookInfo>> books =bookInfoRepo.findAll()
+//                .stream().map(bookEntityFactory::toModel).collect(Collectors.toList());
+//        return CollectionModel.of(books,linkTo(methodOn(BookInfoController.class)
+//                .getAllBooks()).withSelfRel());
+//
+//    }
+    //TODO: fix the problem with this specific path
     @GetMapping("/books")
-    CollectionModel<EntityModel<BookInfo>> getAllBooks(){
-        List<EntityModel<BookInfo>> books =bookInfoRepo.findAll()
-                .stream().map(bookInfoEntityAssembler::toModel).collect(Collectors.toList());
-        return CollectionModel.of(books,linkTo(methodOn(BookInfoController.class)
-                .getAllBooks()).withSelfRel());
-
+    public ResponseEntity<CollectionModel<EntityModel<BookInfo>>> getAllBooks() {
+        return ResponseEntity.ok(bookEntityFactory.toCollectionModel(bookInfoRepo.findAll()));
     }
-    @GetMapping("/Books/{id}")
-    EntityModel<BookInfo> getSpecificBook(@PathVariable Long id){
+    @GetMapping("/book/{id}")
+    public EntityModel<BookInfo> getSpecificBook(@PathVariable Long id){
         BookInfo bookInfo = bookInfoRepo.findById(id).orElseThrow(()->
                 new BookNotFoundException(id));
         return EntityModel.of(bookInfo,
@@ -42,11 +50,12 @@ public class BookInfoController {
                 linkTo(methodOn(BookInfoController.class).getAllBooks()).withRel("back to all books"));
     }
 
-//    @GetMapping("/Books/{id}/info")
-//    ResponseEntity<EntityModel<BookInfo>> bookDetails(@PathVariable Long id){
-//        return bookInfoRepo.findById(id).map(BookInfo::new).map(BookInfoEntityAssembler::toModel)
-//                .map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
-//    }
+    @GetMapping("/book/{id}/info")
+    public ResponseEntity<EntityModel<BookDTO>> bookDetails(@PathVariable Long id){
+        return bookInfoRepo.findById(id).map(BookDTO::new).map(bookDTOFactory::toModel)
+                .map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
+    }
+
 
 
 }
