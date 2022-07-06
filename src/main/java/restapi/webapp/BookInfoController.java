@@ -17,8 +17,7 @@ import java.util.stream.Collectors;
 public class BookInfoController {
     private BookInfoRepo bookInfoRepo;
     private BookEntityFactory bookEntityFactory;
-    //private BookInfoEntityAssembler bookInfoEntityAssembler;
-    private  BookDTOFactory bookDTOFactory;
+    private BookDTOFactory bookDTOFactory;
 
     public BookInfoController(BookInfoRepo bookInfoRepo, BookEntityFactory bookEntityFactory, BookDTOFactory bookDTOFactory) {
         this.bookInfoRepo = bookInfoRepo;
