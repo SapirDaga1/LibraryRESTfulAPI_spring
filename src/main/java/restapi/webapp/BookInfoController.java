@@ -62,6 +62,14 @@ public class BookInfoController {
                 .map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
     }
 
+
+    //TODO: fix this method.
+    @GetMapping("/book")
+    public EntityModel<BookDTO> getBookByTitle(@RequestParam String title){
+        EntityModel<BookDTO> book = bookInfoRepo.findByTitle(title);
+        return book;
+    }
+
     //TODO: add a message to request body
     /**
      *
@@ -79,6 +87,9 @@ public class BookInfoController {
         response.put("deleted", Boolean.TRUE);
         return response;
     }
+    //TODO: add 2 methods with request param
+
+
 
 
 }

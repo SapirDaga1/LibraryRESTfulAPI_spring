@@ -4,9 +4,9 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * This class represent metadata of a book.
@@ -27,6 +27,11 @@ public class BookInfo {
     private int count;
 
     //TODO: many-to-many connection in our database.
+    @ManyToMany
+    @JoinTable(name = "books_info",
+    joinColumns = {@JoinColumn(name = "book_id")},
+    inverseJoinColumns = {@JoinColumn(name = "orderr_id")})
+    List<BooksOrderr> booksOrderrs = new ArrayList<>();
 
     public BookInfo(Long bookID,int shelve, String title, String description, int count) {
 
