@@ -27,19 +27,21 @@ public class BookInfoController {
 
     // 3 GET methods and 1 of other CRUD methods.
 
-//    @GetMapping("/books")
-//    public CollectionModel<EntityModel<BookInfo>> getAllBooks(){
-//        List<EntityModel<BookInfo>> books =bookInfoRepo.findAll()
-//                .stream().map(bookEntityFactory::toModel).collect(Collectors.toList());
-//        return CollectionModel.of(books,linkTo(methodOn(BookInfoController.class)
-//                .getAllBooks()).withSelfRel());
-//
-//    }
-    //TODO: fix the problem with this specific path
+    /**
+     *
+     * @return an iterable of all books.
+     */
     @GetMapping("/books")
-    public ResponseEntity<CollectionModel<EntityModel<BookInfo>>> getAllBooks() {
-        return ResponseEntity.ok(bookEntityFactory.toCollectionModel(bookInfoRepo.findAll()));
-    }
+    public Iterable<BookInfo>getAllBooks(){return bookInfoRepo.findAll();}
+    //    public ResponseEntity<CollectionModel<EntityModel<BookInfo>>> getAllBooks() {
+//        return ResponseEntity.ok(bookEntityFactory.toCollectionModel(bookInfoRepo.findAll()));
+//    }
+
+    /**
+     *
+     * @param id of a specific book
+     * @return link to specific book by it id and link to all the books
+     */
     @GetMapping("/book/{id}")
     public EntityModel<BookInfo> getSpecificBook(@PathVariable Long id){
         BookInfo bookInfo = bookInfoRepo.findById(id).orElseThrow(()->
@@ -49,12 +51,24 @@ public class BookInfoController {
                 linkTo(methodOn(BookInfoController.class).getAllBooks()).withRel("back to all books"));
     }
 
+    /**
+     *
+     * @param id of a specific book.
+     * @return information/details about this book.
+     */
     @GetMapping("/book/{id}/info")
     public ResponseEntity<EntityModel<BookDTO>> bookDetails(@PathVariable Long id){
         return bookInfoRepo.findById(id).map(BookDTO::new).map(bookDTOFactory::toModel)
                 .map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
     }
 
+    //TODO: add a message to request body
+    /**
+     *
+     * @param id of specific book.
+     * @return response of deleting the book.
+     * @throws BookNotFoundException if book does not exist.
+     */
     @DeleteMapping("/book/{id}")
     public Map<String, Boolean> deleteBook(@PathVariable(value = "id") Long id)
             throws BookNotFoundException {
@@ -67,4 +81,4 @@ public class BookInfoController {
     }
 
 
-    }
+}

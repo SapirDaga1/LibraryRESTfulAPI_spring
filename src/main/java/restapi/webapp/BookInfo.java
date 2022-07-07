@@ -26,6 +26,8 @@ public class BookInfo {
     private String description;
     private int count;
 
+    //TODO: many-to-many connection in our database.
+
     public BookInfo(Long bookID,int shelve, String title, String description, int count) {
 
         this.bookID=bookID;

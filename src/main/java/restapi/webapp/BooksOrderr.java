@@ -20,8 +20,7 @@ public class BooksOrderr {
     @Id @GeneratedValue
     private int numberOfOrderr;
     //Value annotation for immutable types.
-//    @Value(" ")
-//    private List<BookDTO> booksList;
+    private List<BookDTO> booksList;
 
     public BooksOrderr(int numberOfOrderr) {
         this.numberOfOrderr = numberOfOrderr;

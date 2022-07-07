@@ -16,7 +16,6 @@ public class BookDTOFactory implements SimpleRepresentationModelAssembler<BookDT
      */
     @Override
     public void addLinks(EntityModel<BookDTO> resource) {
-
         resource.add(linkTo(methodOn(BookInfoController.class).getSpecificBook(resource.getContent().getID())).withRel("single book"));
         resource.add(linkTo(methodOn(BookInfoController.class).getAllBooks()).withRel("all books information"));
     }
@@ -24,7 +23,6 @@ public class BookDTOFactory implements SimpleRepresentationModelAssembler<BookDT
     @Override
     public void addLinks(CollectionModel<EntityModel<BookDTO>> resources) {
         resources.add(linkTo(methodOn(BookInfoController.class).getAllBooks()).withSelfRel());
-
     }
 
     @Override
