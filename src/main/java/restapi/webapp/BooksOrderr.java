@@ -7,9 +7,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 
 import javax.persistence.*;
-import java.awt.print.Book;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -23,15 +21,14 @@ import java.util.Set;
 public class BooksOrderr {
     @Id @GeneratedValue
     private int numberOfOrderr;
-    //private List<BookInfo> list;
 
    @JsonIgnore
    @ManyToMany(mappedBy ="booksOrderrs")
-    private Set<BookInfo> booksList=new HashSet<>();
+    private List<BookDTO> booksList=new ArrayList<>();
 
-    public BooksOrderr(int numberOfOrderr, Set<BookInfo> booksList) {
+    public BooksOrderr(int numberOfOrderr) {
         this.numberOfOrderr = numberOfOrderr;
-        this.booksList = booksList;
+       // this.booksList = booksList;
     }
 }
 
