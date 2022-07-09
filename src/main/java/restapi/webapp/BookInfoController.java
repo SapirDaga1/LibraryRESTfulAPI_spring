@@ -65,8 +65,8 @@ public class BookInfoController {
 
     //TODO: fix this method.
     @GetMapping("/book")
-    public EntityModel<BookDTO> getBookByTitle(@RequestParam String title){
-        EntityModel<BookDTO> book = bookInfoRepo.findByTitle(title);
+    public ResponseEntity<EntityModel<BookDTO>> getBookByTitle(@RequestParam String title){
+        ResponseEntity<EntityModel<BookDTO>> book = bookInfoRepo.findByTitle(title);
         return book;
     }
 
@@ -88,8 +88,6 @@ public class BookInfoController {
         return response;
     }
     //TODO: add 2 methods with request param
-
-
 
 
 }
