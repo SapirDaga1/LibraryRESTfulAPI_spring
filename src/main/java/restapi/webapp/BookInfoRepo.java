@@ -2,6 +2,7 @@ package restapi.webapp;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.hateoas.EntityModel;
+import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 
@@ -11,5 +12,5 @@ import java.util.List;
  */
 public interface BookInfoRepo extends JpaRepository <BookInfo,Long>{
     //TODO: add 3 methods
-    EntityModel<BookDTO> findByTitle(String title);
+    ResponseEntity<EntityModel<BookDTO>> findByTitle(String title);
 }
