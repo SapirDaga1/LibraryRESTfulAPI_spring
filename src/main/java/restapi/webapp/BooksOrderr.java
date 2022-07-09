@@ -23,13 +23,13 @@ import java.util.Set;
 public class BooksOrderr {
     @Id @GeneratedValue
     private int numberOfOrderr;
-    //private List<BookInfo> list;
+    //private Set<BookInfo> list= new HashSet<>();
 
    @JsonIgnore
    @ManyToMany(mappedBy ="booksOrderrs")
     private Set<BookInfo> booksList=new HashSet<>();
 
-    public BooksOrderr(int numberOfOrderr, Set<BookInfo> booksList) {
+    public BooksOrderr(int numberOfOrderr, HashSet<BookInfo> booksList) {
         this.numberOfOrderr = numberOfOrderr;
         this.booksList = booksList;
     }

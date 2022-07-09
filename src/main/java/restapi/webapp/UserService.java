@@ -1,10 +1,12 @@
 package restapi.webapp;
 
+import ch.qos.logback.core.util.SystemInfo;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.security.SignedObject;
 import java.util.concurrent.CompletableFuture;
 import java.util.logging.Logger;
 
@@ -26,17 +28,19 @@ public class UserService {
      * information about a specific book - using @Async annotation and CompletableFuture
      * Our program needs to send an HTTP GET request to a remote REST endpoint
      * we ought to get a JSON representing the book.
-     * @param shelf
+     * @param volumeID
      * @return
      */
     @Async
-    public CompletableFuture<BookInfo> userDetails(int shelf){
-        String urlTemplate = String.format("https://www.googleapis.com/books/v1/users/userId/bookshelves/%shelf",shelf);
+    public CompletableFuture<BookInfo> bookInf(String volumeID){
+        String urlTemplate = String.format("https://www.googleapis.com/books/v1/volumes/%s",volumeID);
         BookInfo bookInfo = this.restTemplate.getForObject(urlTemplate,BookInfo.class);
+        System.out.println("########## bookInfo:" + bookInfo);
         /*
          return a CompletableFuture<BookInfo> when the computation is done
          this goes hand-with-hand with the join() method
          */
+
         return CompletableFuture.completedFuture(bookInfo);
     }
 }
