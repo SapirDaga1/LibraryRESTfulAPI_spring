@@ -62,13 +62,22 @@ public class BookInfoController {
                 .map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
     }
 
-
     //TODO: fix this method.
-    @GetMapping("/book")
-    public ResponseEntity<EntityModel<BookDTO>> getBookByTitle(@RequestParam String title){
-        ResponseEntity<EntityModel<BookDTO>> book = bookInfoRepo.findByTitle(title);
-        return book;
-    }
+//    @GetMapping("/books")
+//    @ResponseBody
+//    public CollectionModel<EntityModel<BookInfo>> getBooksUnderPages(@RequestParam int pages){
+//            List<EntityModel<BookInfo>> books = bookInfoRepo.findAll()
+//                    .stream().filter(book -> book.getPageCount()<pages)
+//                    .map(bookEntityFactory::toModel).collect(Collectors.toList());
+//            return CollectionModel.of(books,linkTo(methodOn(BookInfoController.class)
+//                    .getAllBooks()).withSelfRel());
+//    }
+    //TODO: fix this method.
+//    @GetMapping("/book")
+//    public ResponseEntity<EntityModel<BookDTO>> getBookByTitle(@RequestParam String title){
+//        ResponseEntity<EntityModel<BookDTO>> book = bookInfoRepo.findByTitle(title);
+//        return book;
+//    }
 
     //TODO: add a message to request body
     /**
@@ -87,7 +96,10 @@ public class BookInfoController {
         response.put("deleted", Boolean.TRUE);
         return response;
     }
-    //TODO: add 2 methods with request param
+    //TODO: add 2 methods with 2 request param
+    //get method with 2 request param - books between range of pages
+    //get method with 2 request param - books which published between range of dates.
 
+    //TODO: Methods with complex segmentations
 
 }

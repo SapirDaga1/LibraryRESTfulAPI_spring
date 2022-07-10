@@ -12,6 +12,7 @@ import java.util.Set;
 /**
  * This class represents our Data Base.
  */
+//TODO: think if this class necessary.
 
 @Configuration
 public class Store {

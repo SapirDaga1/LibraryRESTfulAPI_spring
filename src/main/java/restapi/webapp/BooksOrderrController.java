@@ -37,5 +37,8 @@ public class BooksOrderrController {
 //    public BooksOrderr addNewBook (@Valid @RequestBody BookDTO newBook){ // Relied on Jackson component for serialization
 //        return booksOrderrRepo.save(newBook); // Relied on Jackson component for deserialization
 //    }
+    //TODO: add 2 methods with 2 request param
+
+    //TODO: Methods with complex segmentations
 }
 

@@ -13,4 +13,7 @@ import java.util.List;
 public interface BookInfoRepo extends JpaRepository <BookInfo,Long>{
     //TODO: add 3 methods
     ResponseEntity<EntityModel<BookDTO>> findByTitle(String title);
+    //findByPublishedDate(String date)
+
+
 }

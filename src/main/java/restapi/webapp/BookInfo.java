@@ -45,6 +45,7 @@ public class BookInfo {
         this.pageCount = pageCount;
     }
 
+    // Use this for get the relevant properties from the api, due to the JSON structure.
     @JsonProperty("volumeInfo")
     private void unpackedVolumeInfo(Map<String, Object> volumeInfo){
         this.title=(String) volumeInfo.get("title");
