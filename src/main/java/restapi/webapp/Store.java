@@ -18,15 +18,15 @@ import java.util.Set;
 public class Store {
     private static final Logger logger = LoggerFactory.getLogger(Store.class);
 
-//    @Bean
-//    CommandLineRunner initDataBase(BookInfoRepo bookInfoRepo, BooksOrderrRepo booksOrderRepo) {
-//        return args->{
-////            logger.info("logging " + bookInfoRepo.save
-////                    (new BookInfo(1L,5, "The beauty and the beast", "some description....", 10)));
-////            logger.info("logging " + bookInfoRepo.save
-////                    (new BookInfo(2L,15, "The little prince", "some other description....", 2)));
-//        };
-//    }
+    @Bean
+    CommandLineRunner initDataBase(BookInfoRepo bookInfoRepo, BooksOrderrRepo booksOrderRepo,UserInfoRepo userInfoRepo) {
+        return args->{
+            logger.info("logging " + userInfoRepo.save
+                    (new UserInfo("SapirDaga@gmail.com","Sapir","Daga","0501234567")));
+            logger.info("logging " + userInfoRepo.save
+                    (new UserInfo("RotemBT@gmail.com","Rotem","Ben-Tulila","0521471447")));
+        };
+    }
 
 
 }
