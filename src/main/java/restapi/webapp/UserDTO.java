@@ -11,7 +11,7 @@ public class UserDTO {
     @JsonIgnore
     private final UserInfo user;
 
-    private String getFirstName(){return this.user.getFirstName();}
-    private String getLastName(){return this.user.getLastName();}
-    private String getEmail(){return this.user.getEmail();}
+    public String getFirstName(){return this.user.getFirstName();}
+    public String getLastName(){return this.user.getLastName();}
+    public String getEmail(){return this.user.getEmail();}
 }
