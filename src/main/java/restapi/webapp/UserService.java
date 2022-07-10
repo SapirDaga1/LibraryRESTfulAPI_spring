@@ -16,6 +16,7 @@ public class UserService {
     // RestTemplate is used to invoke an external REST point by another service
     private RestTemplate restTemplate;
 
+
     /*
      RestTemplateBuilder is used by Spring to supply default configuration to the
      RestTemplate instance, specifically MessageConvertors
@@ -35,7 +36,7 @@ public class UserService {
     public CompletableFuture<BookInfo> bookInf(String volumeID){
         String urlTemplate = String.format("https://www.googleapis.com/books/v1/volumes/%s",volumeID);
         BookInfo bookInfo = this.restTemplate.getForObject(urlTemplate,BookInfo.class);
-        System.out.println("########## bookInfo:" + bookInfo);
+
         /*
          return a CompletableFuture<BookInfo> when the computation is done
          this goes hand-with-hand with the join() method

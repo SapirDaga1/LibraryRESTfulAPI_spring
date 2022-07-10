@@ -2,10 +2,13 @@ package restapi.webapp;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.util.HashSet;
+import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 
 /**
@@ -23,8 +26,9 @@ public class BookInfo {
     private String id; // book id from the api
     private String title;
     private String publisher;
-    private String description;
-   //private int count;
+    private String publishedDate;
+    private int pageCount;
+
 
     @JsonIgnore
     @ManyToMany
@@ -33,16 +37,20 @@ public class BookInfo {
             inverseJoinColumns = {@JoinColumn(name = "orderr_id")})
     Set<BooksOrderr> booksOrderrs = new HashSet<>();
 
-    public BookInfo(Long bookID) {
-        this.bookID = bookID;
+    public BookInfo(String id, String title, String publisher, String publishedDate, int pageCount) {
+        this.id = id;
+        this.title = title;
+        this.publisher = publisher;
+        this.publishedDate = publishedDate;
+        this.pageCount = pageCount;
     }
 
-    public BookInfo(Long bookID,String id, String title, String description,String publisher) {
-            this.bookID=bookID;
-            this.id =id;
-            this.title = title;
-            this.description = description;
-            this.publisher = publisher;
+    @JsonProperty("volumeInfo")
+    private void unpackedVolumeInfo(Map<String, Object> volumeInfo){
+        this.title=(String) volumeInfo.get("title");
+        this.publisher=(String) volumeInfo.get("publisher");
+        this.publishedDate=(String) volumeInfo.get("publishedDate");
+        this.pageCount=(int) volumeInfo.get("pageCount");
 
     }
 
