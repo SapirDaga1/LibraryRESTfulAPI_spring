@@ -20,7 +20,7 @@ import java.util.Set;
 @Data
 @NoArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class BookInfo {
+public class BookInfo implements Comparable<BookInfo> {
 
     private @Id @GeneratedValue Long bookID; //book id as we create
     private String id; // book id from the api
@@ -53,6 +53,11 @@ public class BookInfo {
         this.publishedDate=(String) volumeInfo.get("publishedDate");
         this.pageCount=(int) volumeInfo.get("pageCount");
 
+    }
+
+    @Override
+    public int compareTo(BookInfo otherBook) {
+        return Double.compare(this.getPageCount(),otherBook.getPageCount());
     }
 
 }

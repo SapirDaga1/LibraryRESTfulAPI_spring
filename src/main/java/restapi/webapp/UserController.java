@@ -25,7 +25,6 @@ public class UserController {
         this.userEntityFactory = userEntityFactory;
 
     }
-
     // 3 GET methods and 1 of other CRUD methods.
 
     /**
@@ -49,12 +48,18 @@ public class UserController {
                 linkTo(methodOn(UserController.class).getAllUsers()).withRel("back to all users"));
     }
 
+    /**
+     *
+     * @param id - actually it is an email address
+     * @return information/details about this user.
+     */
     @GetMapping("/user/{id}/details")
     public ResponseEntity<EntityModel<UserDTO>> userDetails(@PathVariable String id) {
         return userInfoRepo.findById(id).map(UserDTO::new).map(userDTOFactory::toModel)
                 .map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
     }
 
+    //TODO: fix this methods.
 //    @GetMapping("/user")
 //    @ResponseStatus(HttpStatus.OK)
 //    public CollectionModel<EntityModel<UserInfo>> getUserByFirstName(@RequestParam String firstName) {
@@ -83,4 +88,7 @@ public class UserController {
 //        return CollectionModel.of(users,linkTo(methodOn(UserController.class)
 //                .getuserByFullName(firstName,lastName)).withSelfRel());
 //    }
+
+    //TODO: add 2 methods with 2 request param
+    //TODO: Methods with complex segmentations
 }
