@@ -22,4 +22,6 @@ public class UserInfo {
         this.lastName = lastName;
         this.phoneNumber = phoneNumber;
     }
+
+    //TODO: connection user to order
 }

@@ -35,7 +35,7 @@ public class BookInfo {
     @JoinTable(name = "books_info",
             joinColumns = {@JoinColumn(name = "book_id")},
             inverseJoinColumns = {@JoinColumn(name = "orderr_id")})
-    Set<BooksOrderr> booksOrderrs = new HashSet<>();
+    Set<BookInfo> booksOrderrs = new HashSet<>();
 
     public BookInfo(String id, String title, String publisher, String publishedDate, int pageCount) {
         this.id = id;

@@ -21,15 +21,14 @@ import java.util.Set;
 @NoArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class BooksOrderr {
-    @Id @GeneratedValue
-    private int numberOfOrderr;
-
+    //maybe we should put @id as user's order.(String)
+    @Id private int numberOfOrderr;
 
    @JsonIgnore
    @ManyToMany(mappedBy ="booksOrderrs")
     private Set<BookInfo> booksList=new HashSet<>();
 
-    public BooksOrderr(int numberOfOrderr, HashSet<BookInfo> booksList) {
+    public BooksOrderr(int numberOfOrderr, Set<BookInfo> booksList) {
         this.numberOfOrderr = numberOfOrderr;
         this.booksList = booksList;
     }

@@ -2,9 +2,7 @@ package restapi.webapp;
 
 import org.springframework.hateoas.EntityModel;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
@@ -23,11 +21,24 @@ public class BooksOrderrController {
 
     //TODO: 3 GET methods and 1 of other CRUD methods.
 
-//    @GetMapping("/orders")
-//
-//    @GetMapping("/order/{numberOfOrder}")
-//
+    //TODO: fix problem of null parameters in the booksList.
+    @GetMapping("/orders")
+    public Iterable<BooksOrderr>getAllOrders(){return booksOrderrRepo.findAll();}
+
+    @GetMapping("/order/{numberOfOrder}")
+    public EntityModel<BooksOrderr> getSpecificOrder(@PathVariable Long id){
+        BooksOrderr booksOrderr = booksOrderrRepo.findById(id).orElseThrow(()->
+                new BookNotFoundException(id));
+        return EntityModel.of(booksOrderr,
+                linkTo(methodOn(BooksOrderrController.class).getSpecificOrder(id)).withSelfRel(),
+                linkTo(methodOn(BooksOrderrController.class).getAllOrders()).withRel("back to all orders"));
+    }
+
 //    @GetMapping("/order/{numberOfOrder}/info")
+//    public ResponseEntity<EntityModel<BooksOrderr>> bookDetails(@PathVariable Long id){
+//        return booksOrderrRepo.findById(id).map(BooksOrderr::new).map(booksOrderrEntityFactory::toModel)
+//                .map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
+//    }
 
 //    @PostMapping("/newOrder")
 //    public BooksOrderr newOrder(@Valid @RequestBody BookDTO book){
