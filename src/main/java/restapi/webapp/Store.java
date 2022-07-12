@@ -26,7 +26,7 @@ public class Store {
             logger.info("logging " + userInfoRepo.save
                     (new UserInfo("RotemBT@gmail.com","Rotem","Ben-Tulila","0521471447")));
 
-            logger.info("logging " + booksOrderRepo.save(new BooksOrderr(22, new HashSet<BookInfo>(Arrays.asList(bookInfo1, bookInfo2)) {
+            logger.info("logging " + booksOrderRepo.save(new BooksOrderr(22L, new HashSet<BookInfo>(Arrays.asList(bookInfo1, bookInfo2)) {
             })));
 
         };
