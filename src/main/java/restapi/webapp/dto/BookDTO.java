@@ -1,8 +1,9 @@
-package restapi.webapp;
+package restapi.webapp.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Value;
+import restapi.webapp.pojo.BookInfo;
 
 @Value
 @JsonIgnoreProperties({"bookID","title","publisher"})

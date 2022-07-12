@@ -1,10 +1,10 @@
-package restapi.webapp;
+package restapi.webapp.assemblers;
 
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.http.ResponseEntity;
-
-import java.util.Optional;
+import restapi.webapp.pojo.UserInfo;
+import restapi.webapp.dto.UserDTO;
 
 public interface UserInfoRepo extends CrudRepository<UserInfo,Long> {
     ResponseEntity<EntityModel<UserDTO>> getUserByFirstName(String firstName);

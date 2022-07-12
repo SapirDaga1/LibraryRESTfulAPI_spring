@@ -1,19 +1,14 @@
-package restapi.webapp;
+package restapi.webapp.controllers;
 
-import org.apache.catalina.User;
-import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
-import org.springframework.hateoas.IanaLinkRelations;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.List;
-import java.util.stream.Collectors;
+import restapi.webapp.assemblers.UserDTOFactory;
+import restapi.webapp.assemblers.UserEntityFactory;
+import restapi.webapp.assemblers.UserInfoRepo;
+import restapi.webapp.dto.UserDTO;
+import restapi.webapp.exceptions.UserNotFoundException;
+import restapi.webapp.pojo.UserInfo;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;

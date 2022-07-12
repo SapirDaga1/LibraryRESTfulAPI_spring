@@ -1,4 +1,4 @@
-package restapi.webapp;
+package restapi.webapp.controllers;
 
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.hateoas.CollectionModel;
@@ -6,6 +6,12 @@ import org.springframework.hateoas.EntityModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import restapi.webapp.assemblers.BookDTOFactory;
+import restapi.webapp.assemblers.BookEntityFactory;
+import restapi.webapp.assemblers.BookInfoRepo;
+import restapi.webapp.dto.BookDTO;
+import restapi.webapp.exceptions.BookNotFoundException;
+import restapi.webapp.pojo.BookInfo;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;

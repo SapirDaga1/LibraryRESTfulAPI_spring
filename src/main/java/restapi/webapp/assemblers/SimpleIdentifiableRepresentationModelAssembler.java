@@ -1,4 +1,4 @@
-package restapi.webapp;
+package restapi.webapp.assemblers;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
 
 import lombok.Getter;

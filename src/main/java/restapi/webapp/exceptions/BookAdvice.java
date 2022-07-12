@@ -1,4 +1,4 @@
-package restapi.webapp;
+package restapi.webapp.exceptions;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -7,11 +7,14 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ControllerAdvice
-public class UserAdvice {
+/*
+use exception handling globally
+ */
+public class BookAdvice {
     @ResponseBody
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    @ExceptionHandler(UserNotFoundException.class)
-    String userNotFoundHandler(UserNotFoundException userNotFoundException){
-        return userNotFoundException.getMessage();
+    @ExceptionHandler(BookNotFoundException.class)
+    String bookNotFoundHandler(BookNotFoundException bookNotFoundException){
+        return bookNotFoundException.getMessage();
     }
 }

@@ -1,14 +1,12 @@
-package restapi.webapp;
+package restapi.webapp.services;
 
-import ch.qos.logback.core.util.SystemInfo;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+import restapi.webapp.pojo.BookInfo;
 
-import java.security.SignedObject;
 import java.util.concurrent.CompletableFuture;
-import java.util.logging.Logger;
 
 @Service
 public class UserService {
