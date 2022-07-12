@@ -6,7 +6,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import java.util.HashSet;
+import java.util.*;
 
 /**
  * This class represents our Data Base.
@@ -17,15 +17,18 @@ public class Store {
     private static final Logger logger = LoggerFactory.getLogger(Store.class);
 
     @Bean
-    CommandLineRunner initDataBase(BookInfoRepo bookInfoRepo, BooksOrderrRepo booksOrderRepo) {
+    CommandLineRunner initDataBase(BookInfoRepo bookInfoRepo, BooksOrderrRepo booksOrderRepo,UserInfoRepo userInfoRepo) {
+        BookInfo bookInfo1= new BookInfo("LbnwCQAAQBAJ","Harry Potter","McFarland","2015-06-11",150);
+        BookInfo bookInfo2= new BookInfo("LbnwCQAAQBAJ","Harry Potter5","McFarland","2017-06-11",450);
         return args->{
-            logger.info("logging " + bookInfoRepo.save
-                    (new BookInfo(1L,5, "The beauty and the beast", "some description....", 10)));
-            logger.info("logging " + bookInfoRepo.save
-                    (new BookInfo(2L,15, "The little prince", "some other description....", 2)));
-//            logger.info("logging "+ booksOrderRepo.save
-//                    (new BooksOrderr(1,new HashSet<BookInfo>((new BookInfo(3L,33,"The devil wear Prada","wow",3),
-//                            new BookInfo(4L,3,"The devil","bbbbb",3))))));
+            logger.info("logging " + userInfoRepo.save
+                    (new UserInfo("SapirDaga@gmail.com","Sapir","Daga","0501234567")));
+            logger.info("logging " + userInfoRepo.save
+                    (new UserInfo("RotemBT@gmail.com","Rotem","Ben-Tulila","0521471447")));
+
+            logger.info("logging " + booksOrderRepo.save(new BooksOrderr(22L, new HashSet<BookInfo>(Arrays.asList(bookInfo1, bookInfo2)) {
+            })));
+
         };
     }
 

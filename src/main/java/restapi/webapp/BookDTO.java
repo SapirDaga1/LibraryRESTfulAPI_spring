@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Value;
 
 @Value
-@JsonIgnoreProperties({"bookID","title","description"})
+@JsonIgnoreProperties({"bookID","title","publisher"})
 public class BookDTO {
 
     @JsonIgnore
@@ -13,6 +13,9 @@ public class BookDTO {
 
     public Long getID(){ return this.book.getBookID();}
     public String getTitle() {return this.book.getTitle();}
-    public String getDescription(){return this.book.getDescription();}
+    public String getPublisher() {return this.book.getPublisher();}
+    public String getPublishedDate() {return this.book.getPublishedDate();}
+    public int getPageCount() { return this.book.getPageCount();}
+
 
 }
