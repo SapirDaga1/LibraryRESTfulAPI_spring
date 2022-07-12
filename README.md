@@ -1,8 +1,8 @@
 # LibraryRESTfulAPI_spring
 
-- [ ] Add Entity for borrow
-- [ ] Add end point UserService AsyncRunner
+- [X] Add Entity for User
+- [X] Add end point UserService AsyncRunner
 - [ ] Add CRUD operation to BooksOrderr
-- [ ] Add CRUD opreration to borrow
+- [ ] Add CRUD opreration to User
 - [ ] Check if math operation is needed
 - [ ] Desgin class diagram
