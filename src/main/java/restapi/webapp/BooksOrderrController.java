@@ -11,6 +11,7 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @RestController
 public class BooksOrderrController {
+
     private BooksOrderrRepo booksOrderrRepo;
     private BooksOrderrEntityFactory booksOrderrEntityFactory;
 
@@ -40,10 +41,15 @@ public class BooksOrderrController {
 //                .map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
 //    }
 
-//    @PostMapping("/newOrder")
-//    public BooksOrderr newOrder(@Valid @RequestBody BookDTO book){
-//        return BooksOrderrRepo.save(book);}
+    //TODO:check this method
+    @PostMapping("/newOrder")
+    public  ResponseEntity<EntityModel<BooksOrderr>> newOrder(@RequestBody BooksOrderr orderr){
+        BooksOrderr savedBooksOrderr = booksOrderrRepo.save(orderr);
+        return ResponseEntity.created(linkTo(methodOn(BooksOrderrController.class)
+                .getSpecificOrder(savedBooksOrderr.getNumberOfOrderr())).toUri())
+                .body(booksOrderrEntityFactory.toModel(savedBooksOrderr));}
 
+//
 //    @PostMapping("/books")
 //    public BooksOrderr addNewBook (@Valid @RequestBody BookDTO newBook){ // Relied on Jackson component for serialization
 //        return booksOrderrRepo.save(newBook); // Relied on Jackson component for deserialization

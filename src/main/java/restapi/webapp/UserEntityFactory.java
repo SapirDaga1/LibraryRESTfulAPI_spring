@@ -7,3 +7,4 @@ import org.springframework.stereotype.Component;
 public class UserEntityFactory extends SimpleIdentifiableRepresentationModelAssembler<UserInfo>{
     public UserEntityFactory(){super(UserController.class);}
 }
+

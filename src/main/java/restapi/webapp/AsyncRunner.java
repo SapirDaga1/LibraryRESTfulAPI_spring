@@ -24,17 +24,19 @@ public class AsyncRunner implements CommandLineRunner {
     public void run(String... args) throws Exception {
         CompletableFuture<BookInfo> bookInfo1 = userService.bookInf("LbnwCQAAQBAJ");
         CompletableFuture<BookInfo> bookInfo2 = userService.bookInf("TMS8tQEACAAJ");
-        CompletableFuture<BookInfo> bookInfo3 = userService.bookInf("dt4HAQAAMAAJ");
-        CompletableFuture<BookInfo> bookInfo4 = userService.bookInf("MCPjwAEACAAJ");
-        CompletableFuture<BookInfo> bookInfo5 = userService.bookInf("eQRbEAAAQBAJ");
+        CompletableFuture<BookInfo> bookInfo3 = userService.bookInf("X2QEAAAAMBAJ");
+        CompletableFuture<BookInfo> bookInfo4 = userService.bookInf("2wgyBgAAQBAJ");
+        CompletableFuture<BookInfo> bookInfo5 = userService.bookInf("5Tr1jwEACAAJ");
+        CompletableFuture<BookInfo> bookInfo6 = userService.bookInf("AN36DwAAQBAJ");
 
-        CompletableFuture<BookInfo>[] taskArray =  new CompletableFuture[5];
+        CompletableFuture<BookInfo>[] taskArray =  new CompletableFuture[6];
 
         taskArray[0] = bookInfo1;
         taskArray[1] = bookInfo2;
         taskArray[2] = bookInfo3;
         taskArray[3] = bookInfo4;
         taskArray[4] = bookInfo5;
+        taskArray[5] = bookInfo6;
         CompletableFuture.allOf(taskArray);
 
         BookInfo newBookInfo1 = bookInfo1.get();
@@ -42,19 +44,22 @@ public class AsyncRunner implements CommandLineRunner {
         BookInfo newBookInfo3 = bookInfo3.get();
         BookInfo newBookInfo4 = bookInfo4.get();
         BookInfo newBookInfo5 = bookInfo5.get();
+        BookInfo newBookInfo6 = bookInfo5.get();
 
-        CompletableFuture.allOf(bookInfo1,bookInfo2,bookInfo3,bookInfo4,bookInfo5).join();
+        CompletableFuture.allOf(bookInfo1,bookInfo2,bookInfo3,bookInfo4,bookInfo5,bookInfo6).join();
         bookInfoRepo.save(newBookInfo1);
         bookInfoRepo.save(newBookInfo2);
         bookInfoRepo.save(newBookInfo3);
         bookInfoRepo.save(newBookInfo4);
         bookInfoRepo.save(newBookInfo5);
+        bookInfoRepo.save(newBookInfo6);
 
         classLogger.info("bookInfo1 = " + bookInfo1.get());
         classLogger.info("bookInfo2 = " + bookInfo2.get());
         classLogger.info("bookInfo3 = " + bookInfo3.get());
         classLogger.info("bookInfo4 = " + bookInfo4.get());
         classLogger.info("bookInfo5 = " + bookInfo5.get());
+        classLogger.info("bookInfo6 = " + bookInfo6.get());
 
 
     }

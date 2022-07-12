@@ -1,5 +1,6 @@
 package restapi.webapp;
 
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.http.HttpStatus;
@@ -9,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -62,7 +64,6 @@ public class BookInfoController {
 
     @GetMapping("/books/underpages")
     @ResponseStatus(HttpStatus.OK)
-    //@ResponseBody
     public CollectionModel<EntityModel<BookInfo>> getBooksUnderPages(@RequestParam int pages) {
         List<EntityModel<BookInfo>> books = bookInfoRepo.findAll()
                 .stream().filter(book -> book.getPageCount() < pages)
@@ -71,16 +72,15 @@ public class BookInfoController {
                 .getAllBooks()).withSelfRel());
     }
 
-    //TODO: fix this method(return in postman '1' with status code 200).
-    @GetMapping("/book/bytitle")
-    @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<EntityModel<BookDTO>> getBookByTitle(@RequestParam String title) {
-        ResponseEntity<EntityModel<BookDTO>> book = bookInfoRepo.findByTitle(title);
-        return book;
-    }
+    //TODO: fix this method
+//    @GetMapping("/book/bytitle")
+//    @ResponseStatus(HttpStatus.OK)
+//    public ResponseEntity<EntityModel<BookDTO>> getBookByTitle(@RequestParam("title") String title) {
+//        ResponseEntity<EntityModel<BookDTO>> book = bookInfoRepo.findByTitle(title);
+//        return book;
+//    }
 
     //TODO: add a message to request body
-
     /**
      * @param id of specific book.
      * @return response of deleting the book.
@@ -102,10 +102,8 @@ public class BookInfoController {
      * @param toPages   max amount of pages
      * @return all the books with page amount between range: (fromPages, toPages)
      */
-
     @GetMapping("/books/betweenpages")
     @ResponseStatus(HttpStatus.OK)
-    //@ResponseBody
     public CollectionModel<EntityModel<BookInfo>> getBooksBetweenPages(@RequestParam int fromPages, @RequestParam int toPages) {
         List<EntityModel<BookInfo>> books = bookInfoRepo.findAll()
                 .stream().filter(book -> (book.getPageCount() < toPages && book.getPageCount() > fromPages))
@@ -113,19 +111,35 @@ public class BookInfoController {
         return CollectionModel.of(books, linkTo(methodOn(BookInfoController.class)
                 .getAllBooks()).withSelfRel());
     }
-    //get method with 2 request param - books which published between range of dates.
-    //TODO: handle with the dates.
-//    @GetMapping("/books/betweenDates")
-//    @ResponseStatus(HttpStatus.OK)
-//    //@ResponseBody
-//    public CollectionModel<EntityModel<BookInfo>> getBooksBetweenDates(@RequestParam Date fromDate, @RequestParam Date toDate) throws  Exception{
-//        List<EntityModel<BookInfo>> books = bookInfoRepo.findAll()
-//                .stream().filter(book -> (new Date(book.getPublishedDate()).getTime()>= fromDate.getTime() &&
-//                        new Date(book.getPublishedDate()).getTime()<= toDate.getTime()))
-//                .map(bookEntityFactory::toModel).collect(Collectors.toList());
-//        return CollectionModel.of(books,linkTo(methodOn(BookInfoController.class)
-//                .getAllBooks()).withSelfRel());
-//    }
+    /**
+     *
+     * @param fromDate represents starting date looking for
+     * @param toDate represent last date looking for
+     * @return list of entity model of bookInfo that published between range of dates/
+     * @throws Exception
+     */
+    @GetMapping("/books/betweenDates")
+    @ResponseStatus(HttpStatus.OK)
+    public CollectionModel<EntityModel<BookInfo>> getBooksBetweenDates
+    (@RequestParam("fromDate") @DateTimeFormat(pattern = "yyyy-MM-dd") Date fromDate,
+     @RequestParam("toDate") @DateTimeFormat(pattern = "yyyy-MM-dd") Date toDate) throws Exception{
+
+        //this is the format of the date we want to use(filter the date of book from database to this format)
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+
+        List<EntityModel<BookInfo>> books = bookInfoRepo.findAll()
+                .stream().filter(book -> {
+                    try {
+                        return (format.parse(book.getPublishedDate()).getTime()>= fromDate.getTime() &&
+                                format.parse(book.getPublishedDate()).getTime()<= toDate.getTime());
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }return false;
+                })
+                .map(bookEntityFactory::toModel).collect(Collectors.toList());
+        return CollectionModel.of(books,linkTo(methodOn(BookInfoController.class)
+                .getAllBooks()).withSelfRel());
+    }
 
     //TODO: Methods with complex segmentations
     //sort list of books that are between the same pages by the page count.

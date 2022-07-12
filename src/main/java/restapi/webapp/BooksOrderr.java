@@ -22,13 +22,13 @@ import java.util.Set;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class BooksOrderr {
     //maybe we should put @id as user's order.(String)
-    @Id private int numberOfOrderr;
+    @Id private Long numberOfOrderr;
 
    @JsonIgnore
    @ManyToMany(mappedBy ="booksOrderrs")
    private Set<BookInfo> booksList=new HashSet<>();
 
-    public BooksOrderr(int numberOfOrderr, Set<BookInfo> booksList) {
+    public BooksOrderr(Long numberOfOrderr, Set<BookInfo> booksList) {
         this.numberOfOrderr = numberOfOrderr;
         this.booksList = booksList;
     }

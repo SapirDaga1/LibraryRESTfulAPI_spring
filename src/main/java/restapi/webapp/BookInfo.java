@@ -29,7 +29,6 @@ public class BookInfo implements Comparable<BookInfo> {
     private String publishedDate;
     private int pageCount;
 
-
     @JsonIgnore
     @ManyToMany
     @JoinTable(name = "books_info",
