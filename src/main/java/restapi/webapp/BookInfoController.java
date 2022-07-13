@@ -73,11 +73,16 @@ public class BookInfoController {
     }
 
     //TODO: fix this method
-//    @GetMapping("/book/bytitle")
-//    @ResponseStatus(HttpStatus.OK)
-//    public ResponseEntity<EntityModel<BookDTO>> getBookByTitle(@RequestParam("title") String title) {
-//        ResponseEntity<EntityModel<BookDTO>> book = bookInfoRepo.findByTitle(title);
+    @GetMapping("/book/bytitle")
+    @ResponseStatus(HttpStatus.OK)
+    public BookInfo getBookByTitle(@RequestParam("title") String title){
+        BookInfo bookInfo= bookInfoRepo.findByTitle(title);
+        return bookInfo;
+    }
+//    public EntityModel<BookDTO> getBookByTitle(@RequestParam("title") String title) {
+//        EntityModel<BookDTO> book = bookInfoRepo.findByTitle(title);
 //        return book;
+//
 //    }
 
     //TODO: add a message to request body

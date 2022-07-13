@@ -78,9 +78,10 @@ public class UserController {
 
 //@GetMapping("/user/name")
 //@ResponseStatus(HttpStatus.OK)
-//public ResponseEntity<EntityModel<UserDTO>> getUserByFirstN(@RequestParam String firstName){
-//    ResponseEntity<EntityModel<UserDTO>> user = userInfoRepo.getFirstName(firstName);
+//public ResponseEntity<EntityModel<UserInfo>> getUserByFirstName( @RequestParam("firstName") String firstName){
+//    ResponseEntity<EntityModel<UserInfo>> user = userInfoRepo.findByFirstName(firstName);
 //    return user;
+//
 //}
 
     //    @GetMapping("/users/fullname")

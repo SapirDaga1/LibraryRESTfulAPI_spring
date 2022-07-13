@@ -16,20 +16,20 @@ import java.util.Set;
 /**
  * This class represents an order of books.
  */
-@Entity
 @Data
+@Entity
 @NoArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
+@Table(name = "orders")
 public class BooksOrderr {
-    //maybe we should put @id as user's order.(String)
-    @Id private Long numberOfOrderr;
+
+   @Id @GeneratedValue private Long numberOfOrderr;
 
    @JsonIgnore
    @ManyToMany(mappedBy ="booksOrderrs")
-   private Set<BookInfo> booksList=new HashSet<>();
+   private List<BookInfo> booksList= new ArrayList<>();
 
-    public BooksOrderr(Long numberOfOrderr, Set<BookInfo> booksList) {
-        this.numberOfOrderr = numberOfOrderr;
+    public BooksOrderr(List<BookInfo> booksList) {
         this.booksList = booksList;
     }
 }

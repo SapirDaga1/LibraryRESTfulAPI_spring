@@ -26,10 +26,10 @@ public class BooksOrderrController {
     @GetMapping("/orders")
     public Iterable<BooksOrderr>getAllOrders(){return booksOrderrRepo.findAll();}
 
-    @GetMapping("/order/{numberOfOrder}")
+    @GetMapping("/order/{id}")
     public EntityModel<BooksOrderr> getSpecificOrder(@PathVariable Long id){
         BooksOrderr booksOrderr = booksOrderrRepo.findById(id).orElseThrow(()->
-                new BookNotFoundException(id));
+                new OrderrNotFoundException(id));
         return EntityModel.of(booksOrderr,
                 linkTo(methodOn(BooksOrderrController.class).getSpecificOrder(id)).withSelfRel(),
                 linkTo(methodOn(BooksOrderrController.class).getAllOrders()).withRel("back to all orders"));
@@ -41,14 +41,22 @@ public class BooksOrderrController {
 //                .map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
 //    }
 
-    //TODO:check this method
-    @PostMapping("/newOrder")
-    public  ResponseEntity<EntityModel<BooksOrderr>> newOrder(@RequestBody BooksOrderr orderr){
-        BooksOrderr savedBooksOrderr = booksOrderrRepo.save(orderr);
-        return ResponseEntity.created(linkTo(methodOn(BooksOrderrController.class)
-                .getSpecificOrder(savedBooksOrderr.getNumberOfOrderr())).toUri())
-                .body(booksOrderrEntityFactory.toModel(savedBooksOrderr));}
+    //TODO:fix this method
+//    @PostMapping("/newOrder")
+//    public  ResponseEntity<EntityModel<BooksOrderr>> newOrder(@RequestBody BooksOrderr orderr){
+//        BooksOrderr savedBooksOrderr = booksOrderrRepo.save(orderr);
+//        return ResponseEntity.created(linkTo(methodOn(BooksOrderrController.class)
+//                .getSpecificOrder(savedBooksOrderr.getNumberOfOrderr())).toUri())
+//                .body(booksOrderrEntityFactory.toModel(savedBooksOrderr));}
+    @PostMapping("/order/add")
+    public ResponseEntity<EntityModel<BooksOrderr>> addOrderr(@RequestBody BooksOrderr orderr){
 
+        BooksOrderr newOrderr = booksOrderrRepo.save(orderr);
+        return ResponseEntity.created(linkTo(methodOn(BooksOrderrController.class)
+                        .getSpecificOrder(newOrderr.getNumberOfOrderr())).toUri())
+                .body(booksOrderrEntityFactory.toModel(newOrderr));
+
+    }
 //
 //    @PostMapping("/books")
 //    public BooksOrderr addNewBook (@Valid @RequestBody BookDTO newBook){ // Relied on Jackson component for serialization

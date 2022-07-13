@@ -6,18 +6,14 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import javax.persistence.*;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 /**
  * This class represent metadata of a book.
  * It's the strong entity - without books we cannot make orders or borrows.
  */
-
-@Entity
 @Data
+@Entity
 @NoArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class BookInfo implements Comparable<BookInfo> {
@@ -34,7 +30,7 @@ public class BookInfo implements Comparable<BookInfo> {
     @JoinTable(name = "books_info",
             joinColumns = {@JoinColumn(name = "book_id")},
             inverseJoinColumns = {@JoinColumn(name = "orderr_id")})
-    Set<BookInfo> booksOrderrs = new HashSet<>();
+    private List<BooksOrderr> booksOrderrs=new ArrayList<>();
 
     public BookInfo(String id, String title, String publisher, String publishedDate, int pageCount) {
         this.id = id;
@@ -51,7 +47,6 @@ public class BookInfo implements Comparable<BookInfo> {
         this.publisher=(String) volumeInfo.get("publisher");
         this.publishedDate=(String) volumeInfo.get("publishedDate");
         this.pageCount=(int) volumeInfo.get("pageCount");
-
     }
 
     @Override

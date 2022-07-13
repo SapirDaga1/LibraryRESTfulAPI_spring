@@ -18,6 +18,7 @@ public class Store {
 
     @Bean
     CommandLineRunner initDataBase(BookInfoRepo bookInfoRepo, BooksOrderrRepo booksOrderRepo,UserInfoRepo userInfoRepo) {
+
         BookInfo bookInfo1= new BookInfo("LbnwCQAAQBAJ","Harry Potter","McFarland","2015-06-11",150);
         BookInfo bookInfo2= new BookInfo("LbnwCQAAQBAJ","Harry Potter5","McFarland","2017-06-11",450);
         return args->{
@@ -26,7 +27,7 @@ public class Store {
             logger.info("logging " + userInfoRepo.save
                     (new UserInfo("RotemBT@gmail.com","Rotem","Ben-Tulila","0521471447")));
 
-            logger.info("logging " + booksOrderRepo.save(new BooksOrderr(22L, new HashSet<BookInfo>(Arrays.asList(bookInfo1, bookInfo2)) {
+            logger.info("logging " + booksOrderRepo.save(new BooksOrderr( new ArrayList<BookInfo>(Arrays.asList(bookInfo1, bookInfo2)) {
             })));
 
         };
