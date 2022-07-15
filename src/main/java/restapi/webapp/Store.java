@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * This class represents our Data Base.
@@ -21,14 +22,16 @@ public class Store {
 
         BookInfo bookInfo1= new BookInfo("LbnwCQAAQBAJ","Harry Potter","McFarland","2015-06-11",150);
         BookInfo bookInfo2= new BookInfo("LbnwCQAAQBAJ","Harry Potter5","McFarland","2017-06-11",450);
+        bookInfoRepo.save(bookInfo1);
+        bookInfoRepo.save(bookInfo2);
         return args->{
             logger.info("logging " + userInfoRepo.save
                     (new UserInfo("SapirDaga@gmail.com","Sapir","Daga","0501234567")));
             logger.info("logging " + userInfoRepo.save
                     (new UserInfo("RotemBT@gmail.com","Rotem","Ben-Tulila","0521471447")));
 
-            logger.info("logging " + booksOrderRepo.save(new BooksOrderr( new ArrayList<BookInfo>(Arrays.asList(bookInfo1, bookInfo2)) {
-            })));
+            logger.info("logging " + booksOrderRepo.save
+                    (new BooksOrderr((Arrays.asList(bookInfo1,bookInfo2)))));
 
         };
     }

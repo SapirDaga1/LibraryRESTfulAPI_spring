@@ -25,12 +25,16 @@ public class BooksOrderr {
 
    @Id @GeneratedValue private Long numberOfOrderr;
 
-   @JsonIgnore
+   //@JsonIgnore
    @ManyToMany(mappedBy ="booksOrderrs")
    private List<BookInfo> booksList= new ArrayList<>();
 
+    //@JsonIgnore
+   @OneToOne private UserInfo user;
+
     public BooksOrderr(List<BookInfo> booksList) {
         this.booksList = booksList;
+       // this.user=user;
     }
 }
 

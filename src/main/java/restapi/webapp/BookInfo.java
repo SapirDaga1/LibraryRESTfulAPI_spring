@@ -28,8 +28,8 @@ public class BookInfo implements Comparable<BookInfo> {
     @JsonIgnore
     @ManyToMany
     @JoinTable(name = "books_info",
-            joinColumns = {@JoinColumn(name = "book_id")},
-            inverseJoinColumns = {@JoinColumn(name = "orderr_id")})
+            joinColumns = {@JoinColumn(name = "bookID")},
+            inverseJoinColumns = {@JoinColumn(name = "numberOfOrderr")})
     private List<BooksOrderr> booksOrderrs=new ArrayList<>();
 
     public BookInfo(String id, String title, String publisher, String publishedDate, int pageCount) {
