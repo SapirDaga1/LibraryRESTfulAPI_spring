@@ -4,12 +4,14 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.http.ResponseEntity;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface UserInfoRepo extends CrudRepository<UserInfo,Long> {
-    ResponseEntity<EntityModel<UserInfo>> getUserByFirstName(String firstName);
-    UserInfo findByFirstName(String firstName);
-    ResponseEntity<EntityModel<UserInfo>> findByEmail(String email);
+    UserInfo findByEmail(String email);
+    List<UserInfo> findByFirstName(String firstName);
+    List<UserInfo> findByLastName(String firstName);
+
 
 
 

@@ -63,6 +63,23 @@ public class UserController {
                 .map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
     }
 
+    @GetMapping("/user/byFirstName")
+    public ResponseEntity<CollectionModel<EntityModel<UserInfo>>> getUserByFirstName(@RequestParam("firstName") String firstName) {
+        return ResponseEntity.ok(
+                userEntityFactory.toCollectionModel(userInfoRepo.findByFirstName(firstName)));
+    }
+
+    @GetMapping("/user/byLastName")
+    public ResponseEntity<CollectionModel<EntityModel<UserInfo>>> getUserByLastName(@RequestParam("lastName") String lastName) {
+        return ResponseEntity.ok(
+                userEntityFactory.toCollectionModel(userInfoRepo.findByLastName(lastName)));
+    }
+
+    @GetMapping("/user/byEmail")
+    public ResponseEntity<EntityModel<UserInfo>> getUserByEmail(@RequestParam("email") String email) {
+        return ResponseEntity.ok(EntityModel.of(userInfoRepo.findByEmail(email)));
+    }
+
     //TODO: fix this methods.
 //    @GetMapping("/user")
 //    @ResponseStatus(HttpStatus.OK)
@@ -75,22 +92,8 @@ public class UserController {
 //
 //
 //    }
-//
-//@GetMapping("/user/name")
-//@ResponseStatus(HttpStatus.OK)
-//public ResponseEntity<EntityModel<UserInfo>> getUserByFirstName( @RequestParam("firstName") String firstName){
-//    ResponseEntity<EntityModel<UserInfo>> user = userInfoRepo.findByFirstName(firstName);
-//    return user;
-//
+
 //}
-    @GetMapping("/user/name")
-    @ResponseStatus(HttpStatus.OK)
-    public UserInfo getUserByFirstName( @RequestParam("firstName") String firstName){
-        UserInfo user = userInfoRepo.findByFirstName(firstName);
-        return (user);
-
-    }
-
 
 //    @GetMapping("/users/fullname")
 //    @ResponseStatus(HttpStatus.OK)

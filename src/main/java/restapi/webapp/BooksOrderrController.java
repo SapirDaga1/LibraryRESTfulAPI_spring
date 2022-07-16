@@ -64,8 +64,8 @@ public class BooksOrderrController {
                 .body(booksOrderrEntityFactory.toModel(newOrderr));
     }
 
-//    @GetMapping("/orders/numberofbooks")
-//    public CollectionModel<EntityModel<BooksOrderr>> getOrderWithMaxBooks(@RequestParam int numberOfBooks) {
+//    @GetMapping("/orders/numberOfBooks")
+//    public CollectionModel<EntityModel<BooksOrderr>> getOrderWithMaxBooks(@RequestParam("numberOfBooks") int numberOfBooks) {
 //        List<EntityModel<BooksOrderr>> books = StreamSupport.stream(booksOrderrRepo.findAll().spliterator(), false)
 //                .filter(book -> book.getBooksList().size() <= numberOfBooks)
 //                .map(booksOrderrEntityFactory::toModel).collect(Collectors.toList());
