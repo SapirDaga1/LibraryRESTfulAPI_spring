@@ -20,21 +20,34 @@ import java.util.Set;
 @Entity
 @NoArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
-@Table(name = "orders")
+@Table(name = "BooksOrderr")
 public class BooksOrderr {
 
    @Id @GeneratedValue private Long numberOfOrderr;
 
    //@JsonIgnore
-   @ManyToMany(mappedBy ="booksOrderrs")
+   @JoinTable(name = "books_info",
+           joinColumns = {@JoinColumn(name = "numberOfOrderr")},
+           inverseJoinColumns = {@JoinColumn(name = "bookID")})
+   @ManyToMany
    private List<BookInfo> booksList= new ArrayList<>();
 
-    //@JsonIgnore
+   //@JsonIgnore
    @OneToOne private UserInfo user;
 
-    public BooksOrderr(List<BookInfo> booksList) {
+    public BooksOrderr(List<BookInfo> booksList,UserInfo user) {
         this.booksList = booksList;
-       // this.user=user;
+        this.user=user;
     }
+
+
+//    @Override
+//    public String toString() {
+//        return "BooksOrderr{" +
+//                "numberOfOrderr=" + getNumberOfOrderr() +
+//                ", booksList=" + getBooksList() +
+//                ", user=" + getUser() +
+//                '}';
+//    }
 }
 

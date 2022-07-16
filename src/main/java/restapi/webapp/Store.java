@@ -31,7 +31,9 @@ public class Store {
                     (new UserInfo("RotemBT@gmail.com","Rotem","Ben-Tulila","0521471447")));
 
             logger.info("logging " + booksOrderRepo.save
-                    (new BooksOrderr((Arrays.asList(bookInfo1,bookInfo2)))));
+                    (new BooksOrderr(new ArrayList<>(Arrays.asList(bookInfo1,bookInfo2)),
+                           userInfoRepo.save(new UserInfo("natan@gmail.com","natan","dillbary","0505666666")) )));
+
 
         };
     }

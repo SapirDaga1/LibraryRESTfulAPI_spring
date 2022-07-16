@@ -1,5 +1,7 @@
 package restapi.webapp;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,6 +14,7 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 @RestController
 public class BooksOrderrController {
 
+    @Autowired
     private BooksOrderrRepo booksOrderrRepo;
     private BooksOrderrEntityFactory booksOrderrEntityFactory;
 
@@ -22,7 +25,6 @@ public class BooksOrderrController {
 
     //TODO: 3 GET methods and 1 of other CRUD methods.
 
-    //TODO: fix problem of null parameters in the booksList.
     @GetMapping("/orders")
     public Iterable<BooksOrderr>getAllOrders(){return booksOrderrRepo.findAll();}
 
@@ -41,27 +43,23 @@ public class BooksOrderrController {
 //                .map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
 //    }
 
-    //TODO:fix this method
+    //TODO:fix this method- bad requset 400
 //    @PostMapping("/newOrder")
 //    public  ResponseEntity<EntityModel<BooksOrderr>> newOrder(@RequestBody BooksOrderr orderr){
 //        BooksOrderr savedBooksOrderr = booksOrderrRepo.save(orderr);
 //        return ResponseEntity.created(linkTo(methodOn(BooksOrderrController.class)
 //                .getSpecificOrder(savedBooksOrderr.getNumberOfOrderr())).toUri())
 //                .body(booksOrderrEntityFactory.toModel(savedBooksOrderr));}
+
+    //TODO: id with autogenerate shouldn't be entered by user.
     @PostMapping("/order/add")
     public ResponseEntity<EntityModel<BooksOrderr>> addOrderr(@RequestBody BooksOrderr orderr){
-
         BooksOrderr newOrderr = booksOrderrRepo.save(orderr);
         return ResponseEntity.created(linkTo(methodOn(BooksOrderrController.class)
                         .getSpecificOrder(newOrderr.getNumberOfOrderr())).toUri())
                 .body(booksOrderrEntityFactory.toModel(newOrderr));
-
     }
-//
-//    @PostMapping("/books")
-//    public BooksOrderr addNewBook (@Valid @RequestBody BookDTO newBook){ // Relied on Jackson component for serialization
-//        return booksOrderrRepo.save(newBook); // Relied on Jackson component for deserialization
-//    }
+
     //TODO: add 2 methods with 2 request param
 
     //TODO: Methods with complex segmentations

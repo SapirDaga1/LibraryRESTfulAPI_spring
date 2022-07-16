@@ -75,7 +75,7 @@ public class UserController {
 //
 //
 //    }
-
+//
 //@GetMapping("/user/name")
 //@ResponseStatus(HttpStatus.OK)
 //public ResponseEntity<EntityModel<UserInfo>> getUserByFirstName( @RequestParam("firstName") String firstName){
@@ -83,8 +83,15 @@ public class UserController {
 //    return user;
 //
 //}
+    @GetMapping("/user/name")
+    @ResponseStatus(HttpStatus.OK)
+    public UserInfo getUserByFirstName( @RequestParam("firstName") String firstName){
+        UserInfo user = userInfoRepo.findByFirstName(firstName);
+        return (user);
 
-    //    @GetMapping("/users/fullname")
+    }
+
+//    @GetMapping("/users/fullname")
 //    @ResponseStatus(HttpStatus.OK)
 //    //@ResponseBody
 //    public CollectionModel<EntityModel<UserInfo>> getuserByFullName(@RequestParam String firstName, @RequestParam String lastName){

@@ -5,6 +5,9 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
+import lombok.Value;
+
 import javax.persistence.*;
 import java.util.*;
 
@@ -26,10 +29,7 @@ public class BookInfo implements Comparable<BookInfo> {
     private int pageCount;
 
     @JsonIgnore
-    @ManyToMany
-    @JoinTable(name = "books_info",
-            joinColumns = {@JoinColumn(name = "bookID")},
-            inverseJoinColumns = {@JoinColumn(name = "numberOfOrderr")})
+    @ManyToMany(mappedBy = "booksList")
     private List<BooksOrderr> booksOrderrs=new ArrayList<>();
 
     public BookInfo(String id, String title, String publisher, String publishedDate, int pageCount) {
@@ -54,6 +54,18 @@ public class BookInfo implements Comparable<BookInfo> {
         return Double.compare(this.getPageCount(),otherBook.getPageCount());
     }
 
+    @Override
+    public String toString() {
+        return "BookInfo{" +
+                "bookID=" + getBookID() +
+                ", id='" + getId() + '\'' +
+                ", title='" + getTitle() + '\'' +
+                ", publisher='" + getPublisher() + '\'' +
+                ", publishedDate='" + getPublishedDate() + '\'' +
+                ", pageCount=" + getPageCount() +
+                ", booksOrderrs=" + getBooksOrderrs() +
+                '}';
+    }
 }
 
 

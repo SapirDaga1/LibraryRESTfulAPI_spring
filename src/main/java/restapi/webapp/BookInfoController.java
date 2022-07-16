@@ -72,15 +72,20 @@ public class BookInfoController {
                 .getAllBooks()).withSelfRel());
     }
 
-    //TODO: fix this method
-    @GetMapping("/book/bytitle")
+    /**
+     *
+     * @param title of a book
+     * @return the details of book with this {title}.
+     */
+
+    @GetMapping("/book/title")
     @ResponseStatus(HttpStatus.OK)
     public BookInfo getBookByTitle(@RequestParam("title") String title){
         BookInfo bookInfo= bookInfoRepo.findByTitle(title);
         return bookInfo;
     }
-//    public EntityModel<BookDTO> getBookByTitle(@RequestParam("title") String title) {
-//        EntityModel<BookDTO> book = bookInfoRepo.findByTitle(title);
+//    public EntityModel<BookInfo> getBookByTitle(@RequestParam("title") String title) {
+//        EntityModel<BookInfo> book = bookInfoRepo.findByTitle(title);
 //        return book;
 //
 //    }

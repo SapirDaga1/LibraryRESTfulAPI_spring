@@ -13,7 +13,7 @@ import java.util.List;
 public interface BookInfoRepo extends JpaRepository <BookInfo,Long>{
     //TODO: add 3 methods
     BookInfo findByTitle(String title);
-    //EntityModel<BookDTO> findByTitle(String title);
+    //EntityModel<BookInfo> findByTitle(String title);
 
 
 
