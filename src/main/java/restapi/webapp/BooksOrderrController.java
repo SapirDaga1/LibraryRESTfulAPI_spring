@@ -40,6 +40,18 @@ public class BooksOrderrController {
                 linkTo(methodOn(BooksOrderrController.class).getSpecificOrder(id)).withSelfRel(),
                 linkTo(methodOn(BooksOrderrController.class).getAllOrders()).withRel("back to all orders"));
     }
+    //TODO - fix the error status code 500.
+    @GetMapping("/order/cityDelivery")
+    public ResponseEntity<CollectionModel<EntityModel<BooksOrderr>>> getByCityDelivery(@RequestParam("city") String city) {
+        return ResponseEntity.ok(
+                booksOrderrEntityFactory.toCollectionModel(booksOrderrRepo.findByCityOfDelivery(city)));
+    }
+
+//    @GetMapping("/order/byDate")
+//    public ResponseEntity<CollectionModel<EntityModel<BooksOrderr>>> getUserByOrderDate(@RequestParam String date) {
+//        return ResponseEntity.ok(
+//                booksOrderrEntityFactory.toCollectionModel(booksOrderrRepo.findByDateOfOrderr(date)));
+//    }
 
 //    @GetMapping("/order/{numberOfOrder}/info")
 //    public ResponseEntity<EntityModel<BooksOrderr>> bookDetails(@PathVariable Long id){
@@ -63,6 +75,7 @@ public class BooksOrderrController {
                         .getSpecificOrder(newOrderr.getNumberOfOrderr())).toUri())
                 .body(booksOrderrEntityFactory.toModel(newOrderr));
     }
+    
 
 //    @GetMapping("/orders/numberOfBooks")
 //    public CollectionModel<EntityModel<BooksOrderr>> getOrderWithMaxBooks(@RequestParam("numberOfBooks") int numberOfBooks) {

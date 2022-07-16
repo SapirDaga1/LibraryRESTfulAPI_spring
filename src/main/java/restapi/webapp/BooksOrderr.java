@@ -8,10 +8,7 @@ import org.springframework.beans.factory.annotation.Value;
 
 import javax.persistence.*;
 import java.awt.print.Book;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * This class represents an order of books.
@@ -24,6 +21,8 @@ import java.util.Set;
 public class BooksOrderr {
 
    @Id @GeneratedValue private Long numberOfOrderr;
+   private String dateOfOrderr;
+   private String cityOfDelivery;
 
    //@JsonIgnore
    @JoinTable(name = "books_info",
@@ -35,8 +34,10 @@ public class BooksOrderr {
    //@JsonIgnore
    @OneToOne private UserInfo user;
 
-    public BooksOrderr(List<BookInfo> booksList,UserInfo user) {
+    public BooksOrderr(List<BookInfo> booksList,String dateOfOrderr,String cityOfDelivery,UserInfo user) {
         this.booksList = booksList;
+        this.dateOfOrderr=dateOfOrderr;
+        this.cityOfDelivery=cityOfDelivery;
         this.user=user;
     }
 

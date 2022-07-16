@@ -26,13 +26,13 @@ public class Store {
         bookInfoRepo.save(bookInfo2);
         return args->{
             logger.info("logging " + userInfoRepo.save
-                    (new UserInfo("SapirDaga@gmail.com","Sapir","Daga","0501234567")));
+                    (new UserInfo("SapirDaga@gmail.com","Sapir","Daga","0501234567","Tel-Aviv")));
             logger.info("logging " + userInfoRepo.save
-                    (new UserInfo("RotemBT@gmail.com","Rotem","Ben-Tulila","0521471447")));
+                    (new UserInfo("RotemBT@gmail.com","Rotem","Ben-Tulila","0521471447","Ashdod")));
 
             logger.info("logging " + booksOrderRepo.save
-                    (new BooksOrderr(new ArrayList<>(Arrays.asList(bookInfo1,bookInfo2)),
-                           userInfoRepo.save(new UserInfo("natan@gmail.com","natan","dillbary","0505666666")) )));
+                    (new BooksOrderr(new ArrayList<>(Arrays.asList(bookInfo1,bookInfo2)),"2022-5-12","Tel-Aviv",
+                           userInfoRepo.save(new UserInfo("natan@gmail.com","natan","dillbary","0505666666","Bat-Yam")) )));
 
 
         };

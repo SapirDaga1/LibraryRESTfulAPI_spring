@@ -8,6 +8,8 @@ import java.util.List;
 
 public interface BooksOrderrRepo extends CrudRepository<BooksOrderr,Long> {
     //TODO: add 3 methods
+    List<BooksOrderr> findByDateOfOrderr(String date);
+    List<BooksOrderr> findByCityOfDelivery(String city);
 
 
 }

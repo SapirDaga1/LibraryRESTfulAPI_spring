@@ -19,12 +19,14 @@ public class UserInfo {
     private String firstName;
     private String lastName;
     private String phoneNumber;
+    private String city;
 
-    public UserInfo(String email, String firstName, String lastName, String phoneNumber) {
+    public UserInfo(String email, String firstName, String lastName, String phoneNumber,String city) {
         this.email = email;
         this.firstName = firstName;
         this.lastName = lastName;
         this.phoneNumber = phoneNumber;
+        this.city=city;
     }
 
     @JsonIgnore
