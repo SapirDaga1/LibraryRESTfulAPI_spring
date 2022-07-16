@@ -8,6 +8,10 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
+
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
@@ -60,6 +64,14 @@ public class BooksOrderrController {
                 .body(booksOrderrEntityFactory.toModel(newOrderr));
     }
 
+//    @GetMapping("/orders/numberofbooks")
+//    public CollectionModel<EntityModel<BooksOrderr>> getOrderWithMaxBooks(@RequestParam int numberOfBooks) {
+//        List<EntityModel<BooksOrderr>> books = StreamSupport.stream(booksOrderrRepo.findAll().spliterator(), false)
+//                .filter(book -> book.getBooksList().size() <= numberOfBooks)
+//                .map(booksOrderrEntityFactory::toModel).collect(Collectors.toList());
+//        return CollectionModel.of(books, linkTo(methodOn(BookInfoController.class)
+//                .getAllBooks()).withSelfRel());
+//    }
     //TODO: add 2 methods with 2 request param
 
     //TODO: Methods with complex segmentations

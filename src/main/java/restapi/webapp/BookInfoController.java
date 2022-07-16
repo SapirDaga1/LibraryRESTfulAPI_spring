@@ -84,6 +84,32 @@ public class BookInfoController {
         BookInfo bookInfo= bookInfoRepo.findByTitle(title);
         return bookInfo;
     }
+
+    /**
+     *
+     * @param pages represent exact number of pages.
+     * @return book with number of {pages} pages.
+     */
+    @GetMapping("/book/pages")
+    @ResponseStatus(HttpStatus.OK)
+    public BookInfo getBookByCountPages(@RequestParam("pages") int pages){
+        BookInfo bookInfo= bookInfoRepo.findByPageCount(pages);
+        return bookInfo;
+    }
+    @GetMapping("/books/publishedBy/{publisher}")
+    public ResponseEntity<CollectionModel<EntityModel<BookInfo>>> getBookByPublisher(@PathVariable("publisher") String publisher) {
+        return ResponseEntity.ok(
+                bookEntityFactory.toCollectionModel(bookInfoRepo.findByPublisher(publisher)));
+    }
+
+//    @GetMapping("/book/{publisher}")
+//    public List<BookInfo> getBookByPublisher(@RequestParam("pages") String publisher){
+//        List<BookInfo> bookInfo= bookInfoRepo.findByPublisher(publisher);
+//        return bookInfo;
+//
+//    }
+
+
 //    public EntityModel<BookInfo> getBookByTitle(@RequestParam("title") String title) {
 //        EntityModel<BookInfo> book = bookInfoRepo.findByTitle(title);
 //        return book;

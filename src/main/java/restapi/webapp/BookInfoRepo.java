@@ -1,8 +1,10 @@
 package restapi.webapp;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -13,10 +15,6 @@ import java.util.List;
 public interface BookInfoRepo extends JpaRepository <BookInfo,Long>{
     //TODO: add 3 methods
     BookInfo findByTitle(String title);
-    //EntityModel<BookInfo> findByTitle(String title);
-
-
-
-
-
+    BookInfo findByPageCount(int pages);
+    List<BookInfo> findByPublisher(String publisher);
 }
