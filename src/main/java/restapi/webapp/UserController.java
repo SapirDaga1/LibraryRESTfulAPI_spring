@@ -13,7 +13,9 @@ import javax.validation.constraints.NotNull;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
@@ -68,17 +70,27 @@ public class UserController {
         return ResponseEntity.ok(
                 userEntityFactory.toCollectionModel(userInfoRepo.findByFirstName(firstName)));
     }
-    //TODO:fix the issue with that it returns always status 200
+    /**
+     *
+     * @param lastName of specific user
+     * @return details of this user if exist or error message if it doesn't.
+     */
     @GetMapping("/user/byLastName")
-    public ResponseEntity<CollectionModel<EntityModel<UserInfo>>> getUserByLastName(@RequestParam("lastName") String lastName) {
-        return ResponseEntity.ok(
-                userEntityFactory.toCollectionModel(userInfoRepo.findByLastName(lastName)));
+    public ResponseEntity<UserInfo> getUserByLastName(@RequestParam("lastName") Optional<String> lastName) {
+        return Optional.ofNullable(userInfoRepo.findByLastName(lastName))
+                .map(ResponseEntity::ok).orElseThrow(()-> new UserNotFoundException(lastName));
     }
 
-    //TODO: fix error 500 is the email doesn't exist.
-    @GetMapping("/user/byEmail")
-    public ResponseEntity<EntityModel<UserInfo>> getUserByEmail(@RequestParam("email") String email) {
-        return ResponseEntity.ok(EntityModel.of(userInfoRepo.findByEmail(email)));
+    /**
+     *
+     * @param email of specific user
+     * @return details of this user if exist or error message if it doesn't.
+     */
+    @GetMapping("/user/byEmail/{email}")
+    public ResponseEntity<UserInfo> getUserByEmail(@PathVariable("email") String email) {
+        return Optional.ofNullable(userInfoRepo.findByEmail(email))
+                .map(ResponseEntity::ok)
+                .orElseThrow(()-> new UserNotFoundException(email));
     }
 
     //TODO: fix this methods.
