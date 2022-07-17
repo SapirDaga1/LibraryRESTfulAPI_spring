@@ -64,11 +64,19 @@ public class UserController {
         return userInfoRepo.findById(id).map(UserDTO::new).map(userDTOFactory::toModel)
                 .map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
     }
-    //TODO:fix the issue with that it returns always status 200
+
     @GetMapping("/user/byFirstName")
     public ResponseEntity<CollectionModel<EntityModel<UserInfo>>> getUserByFirstName(@RequestParam("firstName") String firstName) {
-        return ResponseEntity.ok(
-                userEntityFactory.toCollectionModel(userInfoRepo.findByFirstName(firstName)));
+
+        //returns always status code 200
+            List<EntityModel<UserInfo>> books = StreamSupport.stream(userInfoRepo.findByFirstName(firstName).spliterator(), false)
+                    .map(userEntityFactory::toModel).collect(Collectors.toList());
+            return  ResponseEntity.ok(CollectionModel.of(books, linkTo(methodOn(BookInfoController.class)
+                    .getAllBooks()).withSelfRel()));
+
+
+        //        return Optional.ofNullable(CollectionModel.of(userInfoRepo.findByFirstName(firstName)))
+//                .map(ResponseEntity::ok).orElseThrow(()-> new UserNotFoundException(firstName));
     }
     /**
      *
@@ -76,6 +84,7 @@ public class UserController {
      * @return details of this user if exist or error message if it doesn't.
      */
     @GetMapping("/user/byLastName")
+    //return only one with this lastName, if there is more than one we get status code 500
     public ResponseEntity<UserInfo> getUserByLastName(@RequestParam("lastName") Optional<String> lastName) {
         return Optional.ofNullable(userInfoRepo.findByLastName(lastName))
                 .map(ResponseEntity::ok).orElseThrow(()-> new UserNotFoundException(lastName));

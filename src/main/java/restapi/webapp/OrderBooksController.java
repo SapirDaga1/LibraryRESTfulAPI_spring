@@ -23,10 +23,18 @@ public class OrderBooksController {
 
     //TODO: 3 GET methods and 1 of other CRUD methods.
 
+    /**
+     *
+     * @return an Iterable of orders.
+     */
     @GetMapping("/orders")
-    public Iterable<OrderBooks>getAllOrders(){return booksOrderrRepo.findAll();}
+    public Iterable<OrderBooks>getAllOrders(){ return booksOrderrRepo.findAll(); }
 
-    //TODO: fix error- response status is 500
+    /**
+     *
+     * @param id of specific order.
+     * @return information/details about this order.
+     */
     @GetMapping("/order/{id}")
     public EntityModel<OrderBooks> getSpecificOrder(@PathVariable Long id){
         OrderBooks booksOrderr = booksOrderrRepo.findById(id).orElseThrow(()->
@@ -57,11 +65,11 @@ public class OrderBooksController {
 
     //TODO: id with autogenerate shouldn't be entered by user.
     @PostMapping("/order/add")
-    public ResponseEntity<EntityModel<OrderBooks>> addOrderr(@RequestBody OrderBooks orderr){
-        OrderBooks newOrderr = booksOrderrRepo.save(orderr);
+    public ResponseEntity<EntityModel<OrderBooks>> addOrder(@RequestBody OrderBooks orderr){
+        OrderBooks newOrder = booksOrderrRepo.save(orderr);
         return ResponseEntity.created(linkTo(methodOn(OrderBooksController.class)
-                        .getSpecificOrder(newOrderr.getNumberOfOrderr())).toUri())
-                .body(booksOrderrEntityFactory.toModel(newOrderr));
+                        .getSpecificOrder(newOrder.getNumberOfOrderr())).toUri())
+                .body(booksOrderrEntityFactory.toModel(newOrder));
     }
 
 

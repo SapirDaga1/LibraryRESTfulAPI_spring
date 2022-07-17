@@ -28,6 +28,8 @@ public class Store {
                     (new UserInfo("SapirDaga@gmail.com","Sapir","Daga","0501234567","Tel-Aviv")));
             logger.info("logging " + userInfoRepo.save
                     (new UserInfo("RotemBT@gmail.com","Rotem","Ben-Tulila","0521471447","Ashdod")));
+            logger.info("logging " + userInfoRepo.save
+                    (new UserInfo("RotemCo@gmail.com","Rotem","Cohen","0507897897","Rishon-Le Zion")));
 
             logger.info("logging " + booksOrderRepo.save
                     (new OrderBooks(new ArrayList<>(Arrays.asList(bookInfo1,bookInfo2)),"2022-5-12","Tel-Aviv",
