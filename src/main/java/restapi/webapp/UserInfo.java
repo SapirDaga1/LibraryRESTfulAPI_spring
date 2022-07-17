@@ -31,5 +31,5 @@ public class UserInfo {
 
     @JsonIgnore
     @OneToOne(mappedBy = "user")
-    private BooksOrderr orderr;
+    private OrderBooks orderr;
 }

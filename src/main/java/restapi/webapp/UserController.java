@@ -41,7 +41,7 @@ public class UserController {
 
     /**
      * @param id- represents the id of user.
-     * @return user links by his id.
+     * @return information/details about this user.
      */
     @GetMapping("/user/{id}")
     public EntityModel<UserInfo> getSpecificUser(@PathVariable Long id) {
@@ -54,27 +54,28 @@ public class UserController {
 
     /**
      *
-     * @param id - actually it is an email address
-     * @return information/details about this user.
+     * @param id - represents the id of user.
+     * @return user links by his id.
      */
     @GetMapping("/user/{id}/details")
     public ResponseEntity<EntityModel<UserDTO>> userDetails(@PathVariable Long id) {
         return userInfoRepo.findById(id).map(UserDTO::new).map(userDTOFactory::toModel)
                 .map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
     }
-
+    //TODO:fix the issue with that it returns always status 200
     @GetMapping("/user/byFirstName")
     public ResponseEntity<CollectionModel<EntityModel<UserInfo>>> getUserByFirstName(@RequestParam("firstName") String firstName) {
         return ResponseEntity.ok(
                 userEntityFactory.toCollectionModel(userInfoRepo.findByFirstName(firstName)));
     }
-
+    //TODO:fix the issue with that it returns always status 200
     @GetMapping("/user/byLastName")
     public ResponseEntity<CollectionModel<EntityModel<UserInfo>>> getUserByLastName(@RequestParam("lastName") String lastName) {
         return ResponseEntity.ok(
                 userEntityFactory.toCollectionModel(userInfoRepo.findByLastName(lastName)));
     }
 
+    //TODO: fix error 500 is the email doesn't exist.
     @GetMapping("/user/byEmail")
     public ResponseEntity<EntityModel<UserInfo>> getUserByEmail(@RequestParam("email") String email) {
         return ResponseEntity.ok(EntityModel.of(userInfoRepo.findByEmail(email)));
@@ -95,16 +96,7 @@ public class UserController {
 
 //}
 
-//    @GetMapping("/users/fullname")
-//    @ResponseStatus(HttpStatus.OK)
-//    //@ResponseBody
-//    public CollectionModel<EntityModel<UserInfo>> getuserByFullName(@RequestParam String firstName, @RequestParam String lastName){
-//        List<EntityModel<UserInfo>> users = userInfoRepo.findAll()
-//                .stream().filter(user -> (user.getFirstName()==firstName && user.getLastName()==lastName))
-//                .map(userEntityFactory::toModel).collect(Collectors.toList());
-//        return CollectionModel.of(users,linkTo(methodOn(UserController.class)
-//                .getuserByFullName(firstName,lastName)).withSelfRel());
-//    }
+
 
     @PostMapping("/users/add")
     public ResponseEntity<EntityModel<UserInfo>> addUser(@RequestBody UserInfo userInfo){
@@ -116,5 +108,15 @@ public class UserController {
 
     }
     //TODO: add 2 methods with 2 request param
+// @GetMapping("/users/fullname")
+//    @ResponseStatus(HttpStatus.OK)
+//    //@ResponseBody
+//    public CollectionModel<EntityModel<UserInfo>> getuserByFullName(@RequestParam String firstName, @RequestParam String lastName){
+//        List<EntityModel<UserInfo>> users = userInfoRepo.findAll()
+//                .stream().filter(user -> (user.getFirstName()==firstName && user.getLastName()==lastName))
+//                .map(userEntityFactory::toModel).collect(Collectors.toList());
+//        return CollectionModel.of(users,linkTo(methodOn(UserController.class)
+//                .getuserByFullName(firstName,lastName)).withSelfRel());
+//    }
     //TODO: Methods with complex segmentations
 }

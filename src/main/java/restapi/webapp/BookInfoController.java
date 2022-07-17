@@ -61,15 +61,14 @@ public class BookInfoController {
         return bookInfoRepo.findById(id).map(BookDTO::new).map(bookDTOFactory::toModel)
                 .map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
     }
-
+    //TODO:fix the issue with that it returns always status 200
     @GetMapping("/books/underpages")
-    @ResponseStatus(HttpStatus.OK)
-    public CollectionModel<EntityModel<BookInfo>> getBooksUnderPages(@RequestParam int pages) {
+    public  ResponseEntity<CollectionModel<EntityModel<BookInfo>>>getBooksUnderPages(@RequestParam int pages) {
         List<EntityModel<BookInfo>> books = bookInfoRepo.findAll()
                 .stream().filter(book -> book.getPageCount() < pages)
                 .map(bookEntityFactory::toModel).collect(Collectors.toList());
-        return CollectionModel.of(books, linkTo(methodOn(BookInfoController.class)
-                .getAllBooks()).withSelfRel());
+        return  ResponseEntity.ok(CollectionModel.of(books, linkTo(methodOn(BookInfoController.class)
+                .getAllBooks()).withSelfRel()));
     }
 
     /**
@@ -102,12 +101,6 @@ public class BookInfoController {
                 bookEntityFactory.toCollectionModel(bookInfoRepo.findByPublisher(publisher)));
     }
 
-//    @GetMapping("/book/{publisher}")
-//    public List<BookInfo> getBookByPublisher(@RequestParam("pages") String publisher){
-//        List<BookInfo> bookInfo= bookInfoRepo.findByPublisher(publisher);
-//        return bookInfo;
-//
-//    }
 
 
 //    public EntityModel<BookInfo> getBookByTitle(@RequestParam("title") String title) {

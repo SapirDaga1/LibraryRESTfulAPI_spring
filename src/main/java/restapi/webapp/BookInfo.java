@@ -5,8 +5,6 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
-import lombok.Value;
 
 import javax.persistence.*;
 import java.util.*;
@@ -27,17 +25,21 @@ public class BookInfo implements Comparable<BookInfo> {
     private String publisher;
     private String publishedDate;
     private int pageCount;
+    private String language;
+    private String contentVersion;
 
     @JsonIgnore
     @ManyToMany(mappedBy = "booksList")
-    private List<BooksOrderr> booksOrderrs=new ArrayList<>();
+    private List<OrderBooks> booksOrderrs=new ArrayList<>();
 
-    public BookInfo(String id, String title, String publisher, String publishedDate, int pageCount) {
+    public BookInfo(String id, String title, String publisher, String publishedDate, int pageCount,String language,String contentVersion) {
         this.id = id;
         this.title = title;
         this.publisher = publisher;
         this.publishedDate = publishedDate;
         this.pageCount = pageCount;
+        this.language=language;
+        this.contentVersion=contentVersion;
     }
 
     // Use this for get the relevant properties from the api, due to the JSON structure.
@@ -47,6 +49,8 @@ public class BookInfo implements Comparable<BookInfo> {
         this.publisher=(String) volumeInfo.get("publisher");
         this.publishedDate=(String) volumeInfo.get("publishedDate");
         this.pageCount=(int) volumeInfo.get("pageCount");
+        this.language=(String) volumeInfo.get("language");
+        this.contentVersion=(String)volumeInfo.get("contentVersion");
     }
 
     @Override
@@ -54,18 +58,18 @@ public class BookInfo implements Comparable<BookInfo> {
         return Double.compare(this.getPageCount(),otherBook.getPageCount());
     }
 
-    @Override
-    public String toString() {
-        return "BookInfo{" +
-                "bookID=" + getBookID() +
-                ", id='" + getId() + '\'' +
-                ", title='" + getTitle() + '\'' +
-                ", publisher='" + getPublisher() + '\'' +
-                ", publishedDate='" + getPublishedDate() + '\'' +
-                ", pageCount=" + getPageCount() +
-                ", booksOrderrs=" + getBooksOrderrs() +
-                '}';
-    }
+//    @Override
+//    public String toString() {
+//        return "BookInfo{" +
+//                "bookID=" + getBookID() +
+//                ", id='" + getId() + '\'' +
+//                ", title='" + getTitle() + '\'' +
+//                ", publisher='" + getPublisher() + '\'' +
+//                ", publishedDate='" + getPublishedDate() + '\'' +
+//                ", pageCount=" + getPageCount() +
+//                ", booksOrderrs=" + getBooksOrderrs() +
+//                '}';
+//    }
 }
 
 

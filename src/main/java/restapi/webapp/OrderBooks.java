@@ -17,8 +17,8 @@ import java.util.*;
 @Entity
 @NoArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
-@Table(name = "BooksOrderr")
-public class BooksOrderr {
+@Table(name = "OrderBooks")
+public class OrderBooks {
 
    @Id @GeneratedValue private Long numberOfOrderr;
    private String dateOfOrderr;
@@ -34,21 +34,12 @@ public class BooksOrderr {
    //@JsonIgnore
    @OneToOne private UserInfo user;
 
-    public BooksOrderr(List<BookInfo> booksList,String dateOfOrderr,String cityOfDelivery,UserInfo user) {
+    public OrderBooks(List<BookInfo> booksList, String dateOfOrderr, String cityOfDelivery, UserInfo user) {
         this.booksList = booksList;
         this.dateOfOrderr=dateOfOrderr;
         this.cityOfDelivery=cityOfDelivery;
         this.user=user;
     }
 
-
-//    @Override
-//    public String toString() {
-//        return "BooksOrderr{" +
-//                "numberOfOrderr=" + getNumberOfOrderr() +
-//                ", booksList=" + getBooksList() +
-//                ", user=" + getUser() +
-//                '}';
-//    }
 }
 
