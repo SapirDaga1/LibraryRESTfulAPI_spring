@@ -170,12 +170,17 @@ public class UserController {
      */
     @GetMapping("/users/byFullName")
     @Operation(summary = "Get all users by firstName + lastName.")
-    public ResponseEntity<CollectionModel<EntityModel<UserInfo>>> getuserByFullName(@RequestParam("firstName") String firstName, @RequestParam("lastName") String lastName){
-        List<EntityModel<UserInfo>> users = StreamSupport.stream(userInfoRepo.findAll().spliterator(),false)
+    public ResponseEntity<CollectionModel<EntityModel<UserInfo>>> getuserByFullName(@RequestParam("firstName") String firstName, @RequestParam("lastName") String lastName) {
+        List<EntityModel<UserInfo>> users = StreamSupport.stream(userInfoRepo.findAll().spliterator(), false)
                 .filter(user -> (Objects.equals(user.getFirstName(), firstName) && Objects.equals(user.getLastName(), lastName)))
                 .map(userEntityFactory::toModel).collect(Collectors.toList());
-        return ResponseEntity.ok(CollectionModel.of(users,linkTo(methodOn(UserController.class)
-                .getAllUsers()).withSelfRel()));
+        if (users.size() != 0) {
+            return ResponseEntity.ok(CollectionModel.of(users, linkTo(methodOn(UserController.class)
+                    .getAllUsers()).withSelfRel()));
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
     //TODO: Methods with complex segmentations
+    //average and median of age
 }
