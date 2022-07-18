@@ -123,7 +123,7 @@ public class UserController {
      * @throws Exception
      */
     @GetMapping("/users/birthdayDates/betweenDates")
-    @Operation(summary = "Get all users that was born between range of dates.",description = "Please enter dates with format - yyyy-mm-dd ")
+    @Operation(summary = "Get all users that was born between range of dates.",description = "Please enter dates with format: yyyy-mm-dd ")
     public ResponseEntity<CollectionModel<EntityModel<UserInfo>>> getUserBirthBetweenDates
             (@RequestParam("fromDate") @DateTimeFormat(pattern = "yyyy-MM-dd") Date fromDate,
              @RequestParam("toDate") @DateTimeFormat(pattern = "yyyy-MM-dd") Date toDate) throws Exception {
