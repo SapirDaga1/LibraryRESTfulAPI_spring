@@ -25,12 +25,12 @@ public class AsyncRunner implements CommandLineRunner {
     }
     @Override
     public void run(String... args) throws Exception {
-        CompletableFuture<BookInfo> bookInfo1 = userService.bookInf("LbnwCQAAQBAJ");
-        CompletableFuture<BookInfo> bookInfo2 = userService.bookInf("TMS8tQEACAAJ");
-        CompletableFuture<BookInfo> bookInfo3 = userService.bookInf("X2QEAAAAMBAJ");
-        CompletableFuture<BookInfo> bookInfo4 = userService.bookInf("2wgyBgAAQBAJ");
-        CompletableFuture<BookInfo> bookInfo5 = userService.bookInf("5Tr1jwEACAAJ");
-        CompletableFuture<BookInfo> bookInfo6 = userService.bookInf("AN36DwAAQBAJ");
+        CompletableFuture<BookInfo> bookInfo1 = userService.getDataFromApi("LbnwCQAAQBAJ");
+        CompletableFuture<BookInfo> bookInfo2 = userService.getDataFromApi("TMS8tQEACAAJ");
+        CompletableFuture<BookInfo> bookInfo3 = userService.getDataFromApi("X2QEAAAAMBAJ");
+        CompletableFuture<BookInfo> bookInfo4 = userService.getDataFromApi("2wgyBgAAQBAJ");
+        CompletableFuture<BookInfo> bookInfo5 = userService.getDataFromApi("5Tr1jwEACAAJ");
+        CompletableFuture<BookInfo> bookInfo6 = userService.getDataFromApi("AN36DwAAQBAJ");
 
         CompletableFuture<BookInfo>[] taskArray =  new CompletableFuture[6];
 
@@ -47,7 +47,7 @@ public class AsyncRunner implements CommandLineRunner {
         BookInfo newBookInfo3 = bookInfo3.get();
         BookInfo newBookInfo4 = bookInfo4.get();
         BookInfo newBookInfo5 = bookInfo5.get();
-        BookInfo newBookInfo6 = bookInfo5.get();
+        BookInfo newBookInfo6 = bookInfo6.get();
 
         CompletableFuture.allOf(bookInfo1,bookInfo2,bookInfo3,bookInfo4,bookInfo5,bookInfo6).join();
         bookInfoRepo.save(newBookInfo1);

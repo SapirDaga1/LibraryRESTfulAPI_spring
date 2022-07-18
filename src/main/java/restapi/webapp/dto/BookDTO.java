@@ -6,7 +6,7 @@ import lombok.Value;
 import restapi.webapp.pojo.BookInfo;
 
 @Value
-@JsonIgnoreProperties({"bookID","title","publisher"})
+@JsonIgnoreProperties({"bookID","title","publisher","publishDate","pageCount","language"})
 public class BookDTO {
 
     @JsonIgnore
@@ -17,6 +17,7 @@ public class BookDTO {
     public String getPublisher() {return this.book.getPublisher();}
     public String getPublishedDate() {return this.book.getPublishedDate();}
     public int getPageCount() { return this.book.getPageCount();}
+    public String getLanguage(){return this.book.getLanguage();}
 
 
 }
