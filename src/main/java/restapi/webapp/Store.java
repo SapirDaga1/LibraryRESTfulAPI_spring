@@ -33,7 +33,7 @@ public class Store {
 
             logger.info("logging " + booksOrderRepo.save
                     (new OrderBooks(new ArrayList<>(Arrays.asList(bookInfo1,bookInfo2)),"2022-5-12","Tel-Aviv",
-                           userInfoRepo.save(new UserInfo("natan@gmail.com","natan","dillbary","0505666666","Bat-Yam")) )));
+                           userInfoRepo.save(new UserInfo("natan@gmail.com","natan","dillbary","0505666666","Bat-Yam")),50 )));
 
 
         };

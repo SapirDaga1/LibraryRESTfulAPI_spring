@@ -30,7 +30,7 @@ public class BookInfo implements Comparable<BookInfo> {
 
     @JsonIgnore
     @ManyToMany(mappedBy = "booksList")
-    private List<OrderBooks> booksOrderrs=new ArrayList<>();
+    private List<OrderBooks> booksOrders =new ArrayList<>();
 
     public BookInfo(String id, String title, String publisher, String publishedDate, int pageCount,String language,String contentVersion) {
         this.id = id;
@@ -58,18 +58,7 @@ public class BookInfo implements Comparable<BookInfo> {
         return Double.compare(this.getPageCount(),otherBook.getPageCount());
     }
 
-//    @Override
-//    public String toString() {
-//        return "BookInfo{" +
-//                "bookID=" + getBookID() +
-//                ", id='" + getId() + '\'' +
-//                ", title='" + getTitle() + '\'' +
-//                ", publisher='" + getPublisher() + '\'' +
-//                ", publishedDate='" + getPublishedDate() + '\'' +
-//                ", pageCount=" + getPageCount() +
-//                ", booksOrderrs=" + getBooksOrderrs() +
-//                '}';
-//    }
+
 }
 
 

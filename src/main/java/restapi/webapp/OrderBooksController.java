@@ -1,10 +1,21 @@
 package restapi.webapp;
 
+import org.aspectj.weaver.ast.Or;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
@@ -21,7 +32,6 @@ public class OrderBooksController {
         this.booksOrderrEntityFactory = booksOrderrEntityFactory;
     }
 
-    //TODO: 3 GET methods and 1 of other CRUD methods.
 
     /**
      *
@@ -43,48 +53,90 @@ public class OrderBooksController {
                 linkTo(methodOn(OrderBooksController.class).getSpecificOrder(id)).withSelfRel(),
                 linkTo(methodOn(OrderBooksController.class).getAllOrders()).withRel("back to all orders"));
     }
-    //TODO - fix the error response status is 500.
-    @GetMapping("/order/cityDelivery")
-    public ResponseEntity<CollectionModel<EntityModel<OrderBooks>>> getByCityDelivery(@RequestParam("city") String city) {
-        return ResponseEntity.ok(
-                booksOrderrEntityFactory.toCollectionModel(booksOrderrRepo.findByCityOfDelivery(city)));
+
+    @GetMapping("/order/cityDelivery/{city}")
+    public ResponseEntity<CollectionModel<EntityModel<OrderBooks>>> getByCityDelivery(@PathVariable("city") String city) {
+
+        List<EntityModel<OrderBooks>> books = StreamSupport.stream(booksOrderrRepo.findByCityOfDelivery(city).spliterator(), false)
+                .map(booksOrderrEntityFactory::toModel).collect(Collectors.toList());
+        return  ResponseEntity.ok(CollectionModel.of(books, linkTo(methodOn(OrderBooksController.class)
+                .getAllOrders()).withSelfRel()));
+
     }
 
-    //TODO - fix the error response status is 500
-    @GetMapping("/order/byDate/{date}")
-    public ResponseEntity<CollectionModel<EntityModel<OrderBooks>>> getUserByOrderDate(@PathVariable("date") String date) {
-        return ResponseEntity.ok(
-                booksOrderrEntityFactory.toCollectionModel(booksOrderrRepo.findByDateOfOrderr(date)));
+    @GetMapping("/order/byPrice/{price}")
+    public ResponseEntity<CollectionModel<EntityModel<OrderBooks>>> getByPrice(@PathVariable("price") int price) {
+
+        List<EntityModel<OrderBooks>> books = StreamSupport.stream(booksOrderrRepo.findByPrice(price).spliterator(), false)
+                .map(booksOrderrEntityFactory::toModel).collect(Collectors.toList());
+        return  ResponseEntity.ok(CollectionModel.of(books, linkTo(methodOn(OrderBooksController.class)
+                .getAllOrders()).withSelfRel()));
     }
 
-//    @GetMapping("/order/{numberOfOrder}/info")
-//    public ResponseEntity<EntityModel<BooksOrderr>> bookDetails(@PathVariable Long id){
-//        return booksOrderrRepo.findById(id).map(BooksOrderr::new).map(booksOrderrEntityFactory::toModel)
-//                .map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
-//    }
+    @GetMapping("/order/byDate")
+    public ResponseEntity<CollectionModel<EntityModel<OrderBooks>>> getUserByOrderDate(@RequestParam("date") String date) {
+
+        List<EntityModel<OrderBooks>> orders = StreamSupport.stream(booksOrderrRepo.findByDateOfOrder(date).spliterator(), false)
+                .map(booksOrderrEntityFactory::toModel).collect(Collectors.toList());
+        return  ResponseEntity.ok(CollectionModel.of(orders, linkTo(methodOn(OrderBooksController.class)
+                .getAllOrders()).withSelfRel()));
+    }
+
+    @GetMapping("/order/{numberOfOrder}/info")
+    public ResponseEntity<EntityModel<OrderBooks>> bookDetails(@PathVariable Long id){
+        return booksOrderrRepo.findById(id).map(OrderBooks::new).map(booksOrderrEntityFactory::toModel)
+                .map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
+    }
+    //returns always status code 200
+    @GetMapping("/order/betweenPrices")
+    public CollectionModel<EntityModel<OrderBooks>> getOrdersBetweenPrices(@RequestParam int fromPrice, @RequestParam int toPrice) {
+        List<EntityModel<OrderBooks>> orders = StreamSupport.stream(booksOrderrRepo.findAll().spliterator(),false)
+                .filter(order -> (order.getPrice() <= toPrice && order.getPrice() >= fromPrice))
+                .map(booksOrderrEntityFactory::toModel).collect(Collectors.toList());
+        return CollectionModel.of(orders, linkTo(methodOn(OrderBooksController.class)
+                .getAllOrders()).withSelfRel());
+    }
 
     //TODO: id with autogenerate shouldn't be entered by user.
     @PostMapping("/order/add")
     public ResponseEntity<EntityModel<OrderBooks>> addOrder(@RequestBody OrderBooks orderr){
         OrderBooks newOrder = booksOrderrRepo.save(orderr);
         return ResponseEntity.created(linkTo(methodOn(OrderBooksController.class)
-                        .getSpecificOrder(newOrder.getNumberOfOrderr())).toUri())
+                        .getSpecificOrder(newOrder.getId())).toUri())
                 .body(booksOrderrEntityFactory.toModel(newOrder));
     }
 
+    @GetMapping("/order/betweenDates")
+    public ResponseEntity<CollectionModel<EntityModel<OrderBooks>>> getOrdersBetweenDates
+            (@RequestParam("fromDate") @DateTimeFormat(pattern = "yyyy-MM-dd") Date fromDate,
+             @RequestParam("toDate") @DateTimeFormat(pattern = "yyyy-MM-dd") Date toDate) throws Exception{
 
-//    @GetMapping("/orders/numberOfBooks")
-//    public CollectionModel<EntityModel<BooksOrderr>> getOrderWithMaxBooks(@RequestParam("numberOfBooks") int numberOfBooks) {
-//        List<EntityModel<BooksOrderr>> books = StreamSupport.stream(booksOrderrRepo.findAll().spliterator(), false)
-//                .map(BooksOrderr::new).filter(book -> book.size() <= numberOfBooks)
-//                .map(booksOrderrEntityFactory::toModel).collect(Collectors.toList());
-//        return CollectionModel.of(books, linkTo(methodOn(BookInfoController.class)
-//                .getAllBooks()).withSelfRel());
-//    }
-    //TODO: add 2 methods with 2 request param
+        //this is the format of the date we want to use(filter the date of book from database to this format)
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 
-    //add get orders between dates(2 request params)
-    //add get orders between size of order (booksList)
+        List<EntityModel<OrderBooks>> books = StreamSupport.stream(booksOrderrRepo.findAll().spliterator(),false)
+                .filter(book -> {
+                    try {
+                        return (format.parse(book.getDateOfOrder()).getTime()>= fromDate.getTime() &&
+                                format.parse(book.getDateOfOrder()).getTime()<= toDate.getTime());
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }return false;
+                })
+                .map(booksOrderrEntityFactory::toModel).collect(Collectors.toList());
+        return ResponseEntity.ok(CollectionModel.of(books,linkTo(methodOn(OrderBooksController.class)
+                .getAllOrders()).withSelfRel()));
+    }
+
+
+    @GetMapping("/orders/numberOfBooks")
+    public CollectionModel<EntityModel<OrderBooks>> getOrderWithMaxBooks(@RequestParam("numberOfBooks") int numberOfBooks) {
+        List<EntityModel<OrderBooks>> books = StreamSupport.stream(booksOrderrRepo.findAll().spliterator(), false)
+                .filter(book -> book.getBooksList().size() <= numberOfBooks)
+                .map(booksOrderrEntityFactory::toModel).collect(Collectors.toList());
+        return CollectionModel.of(books, linkTo(methodOn(OrderBooksController.class)
+                .getAllOrders()).withSelfRel());
+    }
     //TODO: Methods with complex segmentations
 }
 

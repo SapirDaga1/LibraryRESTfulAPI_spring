@@ -13,7 +13,7 @@ import java.util.List;
  * Basic CRUD functionality is implemented according to the specific DB.
  */
 public interface BookInfoRepo extends JpaRepository <BookInfo,Long>{
-    //TODO: add 3 methods
+
     BookInfo findByTitle(String title);
     BookInfo findByPageCount(int pages);
     List<BookInfo> findByPublisher(String publisher);

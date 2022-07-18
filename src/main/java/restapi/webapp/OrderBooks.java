@@ -1,13 +1,10 @@
 package restapi.webapp;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 
 import javax.persistence.*;
-import java.awt.print.Book;
 import java.util.*;
 
 /**
@@ -20,26 +17,46 @@ import java.util.*;
 @Table(name = "OrderBooks")
 public class OrderBooks {
 
-   @Id @GeneratedValue private Long numberOfOrderr;
-   private String dateOfOrderr;
-   private String cityOfDelivery;
 
-   //@JsonIgnore
-   @JoinTable(name = "books_info",
-           joinColumns = {@JoinColumn(name = "numberOfOrderr")},
-           inverseJoinColumns = {@JoinColumn(name = "bookID")})
-   @ManyToMany
-   private List<BookInfo> booksList= new ArrayList<>();
+   @Id @GeneratedValue private Long id;
+    //@JsonIgnore
+    @OneToOne private UserInfo user;
+    //@JsonIgnore
+    @JoinTable(name = "books_info",
+            joinColumns = {@JoinColumn(name = "numberOfOrderr")},
+            inverseJoinColumns = {@JoinColumn(name = "bookID")})
+    @ManyToMany
+    private List<BookInfo> booksList= new ArrayList<>();
+    private String dateOfOrder;
+    private String cityOfDelivery;
+    private int price;
 
-   //@JsonIgnore
-   @OneToOne private UserInfo user;
 
-    public OrderBooks(List<BookInfo> booksList, String dateOfOrderr, String cityOfDelivery, UserInfo user) {
+
+
+
+
+    public OrderBooks(List<BookInfo> booksList, String dateOfOrder, String cityOfDelivery, UserInfo user,int price) {
         this.booksList = booksList;
-        this.dateOfOrderr=dateOfOrderr;
+        this.dateOfOrder=dateOfOrder;
         this.cityOfDelivery=cityOfDelivery;
         this.user=user;
+        this.price=price;
+
     }
 
+    public OrderBooks(OrderBooks orderBooks) {
+    }
+
+    @Override
+    public String toString() {
+        return "OrderBooks{" +
+                "numberOfOrderr=" + getId() +
+                ", dateOfOrder='" + getDateOfOrder() + '\'' +
+                ", cityOfDelivery='" + getCityOfDelivery() + '\'' +
+                ", booksList=" + getBooksList() +
+                ", user=" + getUser() +
+                '}';
+    }
 }
 

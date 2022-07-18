@@ -69,9 +69,9 @@ public class UserController {
     public ResponseEntity<CollectionModel<EntityModel<UserInfo>>> getUserByFirstName(@RequestParam("firstName") String firstName) {
 
         //returns always status code 200
-            List<EntityModel<UserInfo>> books = StreamSupport.stream(userInfoRepo.findByFirstName(firstName).spliterator(), false)
+            List<EntityModel<UserInfo>> users = StreamSupport.stream(userInfoRepo.findByFirstName(firstName).spliterator(), false)
                     .map(userEntityFactory::toModel).collect(Collectors.toList());
-            return  ResponseEntity.ok(CollectionModel.of(books, linkTo(methodOn(BookInfoController.class)
+            return  ResponseEntity.ok(CollectionModel.of(users, linkTo(methodOn(BookInfoController.class)
                     .getAllBooks()).withSelfRel()));
 
 
