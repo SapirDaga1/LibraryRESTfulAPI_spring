@@ -1,5 +1,7 @@
 package restapi.webapp;
 
+import io.swagger.v3.oas.annotations.Operation;
+import jdk.jfr.Description;
 import org.apache.catalina.User;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.hateoas.CollectionModel;
@@ -42,6 +44,7 @@ public class UserController {
      * @return all users in the database
      */
     @GetMapping("/users")
+    @Operation(summary = "Get all users.")
     public Iterable<UserInfo> getAllUsers() {
         return userInfoRepo.findAll();
     }
@@ -51,6 +54,7 @@ public class UserController {
      * @return information/details about this user.
      */
     @GetMapping("/user/{id}")
+    @Operation(summary = "Get a specific user by id.")
     public EntityModel<UserInfo> getSpecificUser(@PathVariable Long id) {
         UserInfo userInfo = userInfoRepo.findById(id).orElseThrow(() ->
                 new UserNotFoundException(id));
@@ -65,12 +69,14 @@ public class UserController {
      * @return user links by his id.
      */
     @GetMapping("/user/{id}/links")
+    @Operation(summary = "Get links of a specific user by id.")
     public ResponseEntity<EntityModel<UserDTO>> userDetails(@PathVariable Long id) {
         return userInfoRepo.findById(id).map(UserDTO::new).map(userDTOFactory::toModel)
                 .map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
     }
 
     @GetMapping("/user/byFirstName")
+    @Operation(summary = "Get users by first name.")
     public ResponseEntity<CollectionModel<EntityModel<UserInfo>>> getUserByFirstName(@RequestParam("firstName") String firstName) {
 
         //returns always status code 200
@@ -89,6 +95,7 @@ public class UserController {
      * @return details of this user if exist or error message if it doesn't.
      */
     @GetMapping("/user/byLastName")
+    @Operation(summary = "Get users by last name.")
     //return only one with this lastName, if there is more than one we get status code 500
     public ResponseEntity<UserInfo> getUserByLastName(@RequestParam("lastName") Optional<String> lastName) {
         return Optional.ofNullable(userInfoRepo.findByLastName(lastName))
@@ -101,6 +108,7 @@ public class UserController {
      * @return details of this user if exist or error message if it doesn't.
      */
     @GetMapping("/user/byEmail/{email}")
+    @Operation(summary = "Get user by email.")
     public ResponseEntity<UserInfo> getUserByEmail(@PathVariable("email") String email) {
         return Optional.ofNullable(userInfoRepo.findByEmail(email))
                 .map(ResponseEntity::ok)
@@ -115,6 +123,7 @@ public class UserController {
      * @throws Exception
      */
     @GetMapping("/users/birthdayDates/betweenDates")
+    @Operation(summary = "Get all users that was born between range of dates.",description = "Please enter dates with format - yyyy-mm-dd ")
     public ResponseEntity<CollectionModel<EntityModel<UserInfo>>> getUserBirthBetweenDates
             (@RequestParam("fromDate") @DateTimeFormat(pattern = "yyyy-MM-dd") Date fromDate,
              @RequestParam("toDate") @DateTimeFormat(pattern = "yyyy-MM-dd") Date toDate) throws Exception {
@@ -143,6 +152,7 @@ public class UserController {
      * @return status code 201 - create user successfully.
      */
     @PostMapping("/users/add")
+    @Operation(summary = "Add new user.")
     public ResponseEntity<EntityModel<UserInfo>> addUser(@RequestBody UserInfo userInfo){
 
             UserInfo savedUser = userInfoRepo.save(userInfo);
@@ -159,6 +169,7 @@ public class UserController {
      * @return CollectionModel<EntityModel<UserInfo>> with the full name - {firstName+lastName}.
      */
     @GetMapping("/users/byFullName")
+    @Operation(summary = "Get all users by firstName + lastName.")
     public ResponseEntity<CollectionModel<EntityModel<UserInfo>>> getuserByFullName(@RequestParam("firstName") String firstName, @RequestParam("lastName") String lastName){
         List<EntityModel<UserInfo>> users = StreamSupport.stream(userInfoRepo.findAll().spliterator(),false)
                 .filter(user -> (Objects.equals(user.getFirstName(), firstName) && Objects.equals(user.getLastName(), lastName)))
