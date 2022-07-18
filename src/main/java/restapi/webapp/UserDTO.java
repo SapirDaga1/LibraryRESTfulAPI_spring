@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Value;
 
 @Value
-@JsonIgnoreProperties({"email","firstName","lastName"})
+@JsonIgnoreProperties({"email","firstName","lastName","dateOfBirth"})
 public class UserDTO {
 
     @JsonIgnore
@@ -14,5 +14,6 @@ public class UserDTO {
     public String getEmail(){return this.user.getEmail();}
     public String getFirstName(){return this.user.getFirstName();}
     public String getLastName(){return this.user.getLastName();}
+    public String getDateOfBirth(){ return this.user.getDateOfBirth();}
 
 }

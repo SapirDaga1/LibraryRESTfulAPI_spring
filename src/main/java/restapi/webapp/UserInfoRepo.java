@@ -12,8 +12,4 @@ public interface UserInfoRepo extends CrudRepository<UserInfo,Long> {
     UserInfo findByEmail(String email);
     List<UserInfo> findByFirstName(String firstName);
     UserInfo findByLastName(Optional<String> firstName);
-
-
-
-
 }
