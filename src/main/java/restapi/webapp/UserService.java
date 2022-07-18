@@ -33,7 +33,7 @@ public class UserService {
      * @return
      */
     @Async
-    public CompletableFuture<BookInfo> bookInf(String volumeID){
+    public CompletableFuture<BookInfo> getDataFromApi(String volumeID){
         String urlTemplate = String.format("https://www.googleapis.com/books/v1/volumes/%s",volumeID);
         BookInfo bookInfo = this.restTemplate.getForObject(urlTemplate,BookInfo.class);
 

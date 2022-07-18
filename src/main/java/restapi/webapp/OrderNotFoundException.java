@@ -1,7 +1,7 @@
 package restapi.webapp;
 
-public class OrderrNotFoundException extends RuntimeException{
-    public OrderrNotFoundException(int numberOfOrder){
+public class OrderNotFoundException extends RuntimeException{
+    public OrderNotFoundException(Long numberOfOrder){
         super("There is no order corresponding to numberOfOrder = " + numberOfOrder);
     }
 }
