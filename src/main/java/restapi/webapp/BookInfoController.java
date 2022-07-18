@@ -104,6 +104,7 @@ public class BookInfoController {
         return ResponseEntity.ok(
                 bookEntityFactory.toCollectionModel(bookInfoRepo.findByPublisher(publisher)));
     }
+    //s
 
     /**
      * @param id of specific book.
