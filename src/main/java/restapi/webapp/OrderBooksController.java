@@ -63,8 +63,10 @@ public class OrderBooksController {
 
         List<EntityModel<OrderBooks>> books = StreamSupport.stream(booksOrderrRepo.findByCityOfDelivery(city).spliterator(), false)
                 .map(booksOrderrEntityFactory::toModel).collect(Collectors.toList());
-        return  ResponseEntity.ok(CollectionModel.of(books, linkTo(methodOn(OrderBooksController.class)
-                .getAllOrders()).withSelfRel()));
+        if (books.size()!=0) {
+            return ResponseEntity.ok(CollectionModel.of(books, linkTo(methodOn(OrderBooksController.class)
+                    .getAllOrders()).withSelfRel()));
+        }return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 
     }
 
@@ -74,8 +76,10 @@ public class OrderBooksController {
 
         List<EntityModel<OrderBooks>> books = StreamSupport.stream(booksOrderrRepo.findByPrice(price).spliterator(), false)
                 .map(booksOrderrEntityFactory::toModel).collect(Collectors.toList());
-        return  ResponseEntity.ok(CollectionModel.of(books, linkTo(methodOn(OrderBooksController.class)
-                .getAllOrders()).withSelfRel()));
+        if (books.size()!=0) {
+            return ResponseEntity.ok(CollectionModel.of(books, linkTo(methodOn(OrderBooksController.class)
+                    .getAllOrders()).withSelfRel()));
+        }else return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     @GetMapping("/order/byDate")
@@ -84,25 +88,29 @@ public class OrderBooksController {
 
         List<EntityModel<OrderBooks>> orders = StreamSupport.stream(booksOrderrRepo.findByDateOfOrder(date).spliterator(), false)
                 .map(booksOrderrEntityFactory::toModel).collect(Collectors.toList());
+        if (orders.size()!=0){
         return  ResponseEntity.ok(CollectionModel.of(orders, linkTo(methodOn(OrderBooksController.class)
-                .getAllOrders()).withSelfRel()));
+                .getAllOrders()).withSelfRel()));}
+        else return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    @GetMapping("/order/{id}/info")
+    @GetMapping("/order/{id}/links")
     @Operation(summary = "Get a specific order by id.")
     public ResponseEntity<EntityModel<OrderBooks>> bookDetails(@PathVariable Long id){
         return booksOrderrRepo.findById(id).map(OrderBooks::new).map(booksOrderrEntityFactory::toModel)
                 .map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
     }
-    //returns always status code 200
+
     @GetMapping("/order/betweenPrices")
     @Operation(summary = "Get all orders in range of price to pay.")
-    public CollectionModel<EntityModel<OrderBooks>> getOrdersBetweenPrices(@RequestParam int fromPrice, @RequestParam int toPrice) {
+    public ResponseEntity<CollectionModel<EntityModel<OrderBooks>>> getOrdersBetweenPrices(@RequestParam int fromPrice, @RequestParam int toPrice) {
         List<EntityModel<OrderBooks>> orders = StreamSupport.stream(booksOrderrRepo.findAll().spliterator(),false)
                 .filter(order -> (order.getPrice() <= toPrice && order.getPrice() >= fromPrice))
                 .map(booksOrderrEntityFactory::toModel).collect(Collectors.toList());
-        return CollectionModel.of(orders, linkTo(methodOn(OrderBooksController.class)
-                .getAllOrders()).withSelfRel());
+        if(orders.size()!=0) {
+            return ResponseEntity.ok(CollectionModel.of(orders, linkTo(methodOn(OrderBooksController.class)
+                    .getAllOrders()).withSelfRel()));
+        }else return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     //TODO: id with autogenerate shouldn't be entered by user.
@@ -134,19 +142,24 @@ public class OrderBooksController {
                     }return false;
                 })
                 .map(booksOrderrEntityFactory::toModel).collect(Collectors.toList());
+        if (books.size()!=0){
         return ResponseEntity.ok(CollectionModel.of(books,linkTo(methodOn(OrderBooksController.class)
                 .getAllOrders()).withSelfRel()));
+        }else return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+
     }
 
 
     @GetMapping("/orders/numberOfBooks")
     @Operation(summary = "Get all books with up to number of books list.")
-    public CollectionModel<EntityModel<OrderBooks>> getOrderWithMaxBooks(@RequestParam("numberOfBooks") int numberOfBooks) {
+    public ResponseEntity<CollectionModel<EntityModel<OrderBooks>>> getOrderWithMaxBooks(@RequestParam("numberOfBooks") int numberOfBooks) {
         List<EntityModel<OrderBooks>> books = StreamSupport.stream(booksOrderrRepo.findAll().spliterator(), false)
                 .filter(book -> book.getBooksList().size() <= numberOfBooks)
                 .map(booksOrderrEntityFactory::toModel).collect(Collectors.toList());
-        return CollectionModel.of(books, linkTo(methodOn(OrderBooksController.class)
-                .getAllOrders()).withSelfRel());
+        if(books.size()!=0) {
+            return ResponseEntity.ok(CollectionModel.of(books, linkTo(methodOn(OrderBooksController.class)
+                    .getAllOrders()).withSelfRel()));
+        }else return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
     //TODO: Methods with complex segmentations
     //city with max delivery
