@@ -2,7 +2,9 @@ package restapi.webapp;
 
 import io.swagger.v3.oas.annotations.Operation;
 import jdk.jfr.Description;
+import net.bytebuddy.asm.Advice;
 import org.apache.catalina.User;
+import org.springframework.data.jpa.convert.threeten.Jsr310JpaConverters;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
@@ -17,6 +19,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
@@ -79,15 +82,14 @@ public class UserController {
     @Operation(summary = "Get users by first name.")
     public ResponseEntity<CollectionModel<EntityModel<UserInfo>>> getUserByFirstName(@RequestParam("firstName") String firstName) {
 
-        //returns always status code 200
             List<EntityModel<UserInfo>> users = StreamSupport.stream(userInfoRepo.findByFirstName(firstName).spliterator(), false)
                     .map(userEntityFactory::toModel).collect(Collectors.toList());
-            return  ResponseEntity.ok(CollectionModel.of(users, linkTo(methodOn(BookInfoController.class)
-                    .getAllBooks()).withSelfRel()));
-
-
-        //        return Optional.ofNullable(CollectionModel.of(userInfoRepo.findByFirstName(firstName)))
-//                .map(ResponseEntity::ok).orElseThrow(()-> new UserNotFoundException(firstName));
+            if(users.size()!=0) {
+                return ResponseEntity.ok(CollectionModel.of(users, linkTo(methodOn(BookInfoController.class)
+                        .getAllBooks()).withSelfRel()));
+            }else{
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
     }
     /**
      *
@@ -97,9 +99,15 @@ public class UserController {
     @GetMapping("/user/byLastName")
     @Operation(summary = "Get users by last name.")
     //return only one with this lastName, if there is more than one we get status code 500
-    public ResponseEntity<UserInfo> getUserByLastName(@RequestParam("lastName") Optional<String> lastName) {
-        return Optional.ofNullable(userInfoRepo.findByLastName(lastName))
-                .map(ResponseEntity::ok).orElseThrow(()-> new UserNotFoundException(lastName));
+    public ResponseEntity<CollectionModel<EntityModel<UserInfo>>> getUserByLastName(@RequestParam("lastName") Optional<String> lastName) {
+        List<EntityModel<UserInfo>> users = StreamSupport.stream(userInfoRepo.findByLastName(lastName).spliterator(), false)
+                .map(userEntityFactory::toModel).collect(Collectors.toList());
+        if(users.size()!=0) {
+            return ResponseEntity.ok(CollectionModel.of(users, linkTo(methodOn(BookInfoController.class)
+                    .getAllBooks()).withSelfRel()));
+        }else{
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 
     /**
@@ -141,8 +149,12 @@ public class UserController {
                     return false;
                 })
                 .map(userEntityFactory::toModel).collect(Collectors.toList());
-        return ResponseEntity.ok(CollectionModel.of(users, linkTo(methodOn(UserController.class)
-                .getAllUsers()).withSelfRel()));
+        if(users.size()!=0) {
+            return ResponseEntity.ok(CollectionModel.of(users, linkTo(methodOn(UserController.class)
+                    .getAllUsers()).withSelfRel()));
+        }else{
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
 
     }
 
@@ -183,4 +195,9 @@ public class UserController {
     }
     //TODO: Methods with complex segmentations
     //average and median of age
+
+    //@GetMapping("/users/averageAge")
+    //@GetMapping("/users/medianAge")
+
+
 }
