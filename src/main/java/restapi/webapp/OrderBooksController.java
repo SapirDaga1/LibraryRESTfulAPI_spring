@@ -10,12 +10,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.lang.reflect.Array;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
@@ -149,6 +150,15 @@ public class OrderBooksController {
                 .getAllOrders()).withSelfRel());
     }
     //TODO: Methods with complex segmentations
-    //city with max delivery
+    public String getCityWithMaxDelivery() {
+//        Map<List<OrderBooks>,Long> cityCount = Stream.of(orders).collect(Collectors.groupingBy(Function.identity(),Collectors.counting()));
+//        Long maxValueInMap=Collections.max(cityCount.values());
+//        for (Map.Entry<List<OrderBooks>,Long> entry: cityCount.entrySet()){
+//            if (entry.getValue()==maxValueInMap)
+//                return entry.getValue();
+//        }
+//        return maxValueInMap;
+        return  "";
+    }
 }
 
