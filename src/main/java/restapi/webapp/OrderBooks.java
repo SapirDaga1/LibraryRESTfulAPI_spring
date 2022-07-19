@@ -32,10 +32,6 @@ public class OrderBooks {
     private int price;
 
 
-
-
-
-
     public OrderBooks(List<BookInfo> booksList, String dateOfOrder, String cityOfDelivery, UserInfo user,int price) {
         this.booksList = booksList;
         this.dateOfOrder=dateOfOrder;
@@ -47,7 +43,6 @@ public class OrderBooks {
 
     public OrderBooks(OrderBooks orderBooks) {
     }
-
     @Override
     public String toString() {
         return "OrderBooks{" +
@@ -58,5 +53,6 @@ public class OrderBooks {
                 ", user=" + getUser() +
                 '}';
     }
+
 }
 

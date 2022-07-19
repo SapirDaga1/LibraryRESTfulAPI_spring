@@ -15,15 +15,13 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import java.lang.reflect.Array;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.util.Date;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -32,11 +30,13 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @RestController
 public class UserController {
+    int CURRYEAR = 2022;
+
     private UserInfoRepo userInfoRepo;
     private UserDTOFactory userDTOFactory;
     private UserEntityFactory userEntityFactory;
 
-    public UserController(UserInfoRepo userInfoRepo, UserDTOFactory userDTOFactory,UserEntityFactory userEntityFactory) {
+    public UserController(UserInfoRepo userInfoRepo, UserDTOFactory userDTOFactory, UserEntityFactory userEntityFactory) {
         this.userInfoRepo = userInfoRepo;
         this.userDTOFactory = userDTOFactory;
         this.userEntityFactory = userEntityFactory;
@@ -67,7 +67,6 @@ public class UserController {
     }
 
     /**
-     *
      * @param id - represents the id of user.
      * @return user links by his id.
      */
@@ -82,17 +81,17 @@ public class UserController {
     @Operation(summary = "Get users by first name.")
     public ResponseEntity<CollectionModel<EntityModel<UserInfo>>> getUserByFirstName(@RequestParam("firstName") String firstName) {
 
-            List<EntityModel<UserInfo>> users = StreamSupport.stream(userInfoRepo.findByFirstName(firstName).spliterator(), false)
-                    .map(userEntityFactory::toModel).collect(Collectors.toList());
-            if(users.size()!=0) {
-                return ResponseEntity.ok(CollectionModel.of(users, linkTo(methodOn(BookInfoController.class)
-                        .getAllBooks()).withSelfRel()));
-            }else{
-                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-            }
+        List<EntityModel<UserInfo>> users = StreamSupport.stream(userInfoRepo.findByFirstName(firstName).spliterator(), false)
+                .map(userEntityFactory::toModel).collect(Collectors.toList());
+        if (users.size() != 0) {
+            return ResponseEntity.ok(CollectionModel.of(users, linkTo(methodOn(BookInfoController.class)
+                    .getAllBooks()).withSelfRel()));
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
+
     /**
-     *
      * @param lastName of specific user
      * @return details of this user if exist or error message if it doesn't.
      */
@@ -102,16 +101,15 @@ public class UserController {
     public ResponseEntity<CollectionModel<EntityModel<UserInfo>>> getUserByLastName(@RequestParam("lastName") Optional<String> lastName) {
         List<EntityModel<UserInfo>> users = StreamSupport.stream(userInfoRepo.findByLastName(lastName).spliterator(), false)
                 .map(userEntityFactory::toModel).collect(Collectors.toList());
-        if(users.size()!=0) {
+        if (users.size() != 0) {
             return ResponseEntity.ok(CollectionModel.of(users, linkTo(methodOn(BookInfoController.class)
                     .getAllBooks()).withSelfRel()));
-        }else{
+        } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
 
     /**
-     *
      * @param email of specific user
      * @return details of this user if exist or error message if it doesn't.
      */
@@ -120,27 +118,27 @@ public class UserController {
     public ResponseEntity<UserInfo> getUserByEmail(@PathVariable("email") String email) {
         return Optional.ofNullable(userInfoRepo.findByEmail(email))
                 .map(ResponseEntity::ok)
-                .orElseThrow(()-> new UserNotFoundException(email));
+                .orElseThrow(() -> new UserNotFoundException(email));
     }
 
     /**
-     *
      * @param fromDate to search.
-     * @param toDate to search.
-     * @return Collection<EntityModel<UserInfo>>> of users that was born between (fromDate,toDate).
+     * @param toDate   to search.
+     * @return Collection<EntityModel < UserInfo>>> of users that was born between (fromDate,toDate).
      * @throws Exception
      */
     @GetMapping("/users/birthdayDates/betweenDates")
-    @Operation(summary = "Get all users that was born between range of dates.",description = "Please enter dates with format: yyyy-mm-dd ")
+    @Operation(summary = "Get all users that was born between range of dates.", description = "Please enter dates with format: yyyy-mm-dd ")
     public ResponseEntity<CollectionModel<EntityModel<UserInfo>>> getUserBirthBetweenDates
-            (@RequestParam("fromDate") @DateTimeFormat(pattern = "yyyy-MM-dd") Date fromDate,
-             @RequestParam("toDate") @DateTimeFormat(pattern = "yyyy-MM-dd") Date toDate) throws Exception {
+    (@RequestParam("fromDate") @DateTimeFormat(pattern = "yyyy-MM-dd") Date fromDate,
+     @RequestParam("toDate") @DateTimeFormat(pattern = "yyyy-MM-dd") Date toDate) throws Exception {
 
         //this is the format of the date we want to use(filter the date of birthday)
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 
         List<EntityModel<UserInfo>> users = StreamSupport.stream(userInfoRepo.findAll().spliterator(), false)
-                .filter(user -> { try {
+                .filter(user -> {
+                    try {
                         return (format.parse(user.getDateOfBirth()).getTime() >= fromDate.getTime() &&
                                 format.parse(user.getDateOfBirth()).getTime() <= toDate.getTime());
                     } catch (ParseException e) {
@@ -149,36 +147,34 @@ public class UserController {
                     return false;
                 })
                 .map(userEntityFactory::toModel).collect(Collectors.toList());
-        if(users.size()!=0) {
+        if (users.size() != 0) {
             return ResponseEntity.ok(CollectionModel.of(users, linkTo(methodOn(UserController.class)
                     .getAllUsers()).withSelfRel()));
-        }else{
+        } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
     }
 
     /**
-     *
      * @param userInfo -details of a new user.
      * @return status code 201 - create user successfully.
      */
     @PostMapping("/users/add")
     @Operation(summary = "Add new user.")
-    public ResponseEntity<EntityModel<UserInfo>> addUser(@RequestBody UserInfo userInfo){
+    public ResponseEntity<EntityModel<UserInfo>> addUser(@RequestBody UserInfo userInfo) {
 
-            UserInfo savedUser = userInfoRepo.save(userInfo);
-            return ResponseEntity.created(linkTo(methodOn(UserController.class)
-                            .getSpecificUser(savedUser.getId())).toUri())
-                    .body(userEntityFactory.toModel(savedUser));
+        UserInfo savedUser = userInfoRepo.save(userInfo);
+        return ResponseEntity.created(linkTo(methodOn(UserController.class)
+                        .getSpecificUser(savedUser.getId())).toUri())
+                .body(userEntityFactory.toModel(savedUser));
 
     }
 
     /**
-     *
      * @param firstName of a specific user.
-     * @param lastName of a specific user.
-     * @return CollectionModel<EntityModel<UserInfo>> with the full name - {firstName+lastName}.
+     * @param lastName  of a specific user.
+     * @return CollectionModel<EntityModel < UserInfo>> with the full name - {firstName+lastName}.
      */
     @GetMapping("/users/byFullName")
     @Operation(summary = "Get all users by firstName + lastName.")
@@ -193,11 +189,39 @@ public class UserController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
-    //TODO: Methods with complex segmentations
-    //average and median of age
 
-    //@GetMapping("/users/averageAge")
-    //@GetMapping("/users/medianAge")
+    /**
+     *
+     * @return the average age of users.
+     */
+    @GetMapping("/users/averageAge")
+    @Operation(summary = "Get average age of users.")
+    public ResponseEntity<String> getAvgAge() {
+        List<UserInfo> list = StreamSupport.stream(userInfoRepo.findAll().spliterator(), false).collect(Collectors.toList());
+        int sum = 0, age = 0;
+        for (int i = 0; i < list.size(); i++) {
+            age = CURRYEAR - Integer.parseInt(((list.get(i).getDateOfBirth())).substring(0, 4));
+            sum += age;
+        }
+        return ResponseEntity.ok("The average age of users is  " + sum / (list.size()));
+    }
 
+    /**
+     *
+     * @return the median age of users.
+     */
+    @GetMapping("/users/medianAge")
+    @Operation(summary = "Get median age of users.")
+    public ResponseEntity<String> getMedianAge() {
+        List<UserInfo> list = StreamSupport.stream(userInfoRepo.findAll().spliterator(), false).collect(Collectors.toList());
+        int ages[] = new int[list.size()];
+        for (int i = 0; i < list.size(); i++) {
+            ages[i] = CURRYEAR - Integer.parseInt(((list.get(i).getDateOfBirth())).substring(0, 4));
+        }
+        Arrays.sort(ages);
+        if (ages.length % 2 == 0) return  ResponseEntity.ok("The median age of users is:"+ (((double) ages[ages.length / 2] + (double) ages[ages.length / 2 - 1]) / 2));
+        else
+            return ResponseEntity.ok("The median age of users is:"+(double) ages[ages.length / 2]);
 
+    }
 }
