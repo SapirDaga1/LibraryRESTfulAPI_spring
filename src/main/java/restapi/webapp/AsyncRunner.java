@@ -15,7 +15,6 @@ public class AsyncRunner implements CommandLineRunner {
     private static final Logger classLogger = LoggerFactory.getLogger(AsyncRunner.class);
     private BookInfoRepo bookInfoRepo;
 
-
     public AsyncRunner(UserService userService,BookInfoRepo bookInfoRepo){
         this.userService=userService;
         this.bookInfoRepo=bookInfoRepo;
@@ -60,7 +59,6 @@ public class AsyncRunner implements CommandLineRunner {
         classLogger.info("bookInfo4 = " + bookInfo4.get());
         classLogger.info("bookInfo5 = " + bookInfo5.get());
         classLogger.info("bookInfo6 = " + bookInfo6.get());
-
 
     }
 }

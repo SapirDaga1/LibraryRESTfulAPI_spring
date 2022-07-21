@@ -9,7 +9,7 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 
 @Component
-public class BookDTOFactory implements SimpleRepresentationModelAssembler<BookDTO> {
+public class BookDTOAssembler implements SimpleRepresentationModelAssembler<BookDTO> {
     /**
      * Define links to add to every individual {@link EntityModel}.
      * @param resource

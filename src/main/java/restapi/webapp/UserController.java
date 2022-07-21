@@ -1,26 +1,16 @@
 package restapi.webapp;
 
 import io.swagger.v3.oas.annotations.Operation;
-import jdk.jfr.Description;
-import net.bytebuddy.asm.Advice;
-import org.apache.catalina.User;
-import org.springframework.data.jpa.convert.threeten.Jsr310JpaConverters;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
-import org.springframework.hateoas.IanaLinkRelations;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
-import java.lang.reflect.Array;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
@@ -33,10 +23,10 @@ public class UserController {
     int CURRYEAR = 2022;
 
     private UserInfoRepo userInfoRepo;
-    private UserDTOFactory userDTOFactory;
-    private UserEntityFactory userEntityFactory;
+    private UserDTOAssembler userDTOFactory;
+    private UserEntityAssembler userEntityFactory;
 
-    public UserController(UserInfoRepo userInfoRepo, UserDTOFactory userDTOFactory, UserEntityFactory userEntityFactory) {
+    public UserController(UserInfoRepo userInfoRepo, UserDTOAssembler userDTOFactory, UserEntityAssembler userEntityFactory) {
         this.userInfoRepo = userInfoRepo;
         this.userDTOFactory = userDTOFactory;
         this.userEntityFactory = userEntityFactory;
@@ -44,7 +34,8 @@ public class UserController {
     }
 
     /**
-     * @return all users in the database
+     * This method search for all users from the database.
+     * @return an iterable of UserInfo.
      */
     @GetMapping("/users")
     @Operation(summary = "Get all users.")
@@ -53,8 +44,9 @@ public class UserController {
     }
 
     /**
-     * @param id- represents the id of user.
-     * @return information/details about this user.
+     * This method search for a specific user from database by its id.
+     * @param id of a specific user.
+     * @return EntityModel of UserInfo.
      */
     @GetMapping("/user/{id}")
     @Operation(summary = "Get a specific user by id.")
@@ -67,8 +59,9 @@ public class UserController {
     }
 
     /**
-     * @param id - represents the id of user.
-     * @return user links by his id.
+     * This method gives us links of a specific user by its id.
+     * @param id of a specific user.
+     * @return EntityModel of UserDTO.
      */
     @GetMapping("/user/{id}/links")
     @Operation(summary = "Get links of a specific user by id.")
@@ -77,41 +70,43 @@ public class UserController {
                 .map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
     }
 
+    /**
+     * This method search for users with specific first name.
+     * @param firstName of user.
+     * @return CollectionModel of EntityModel of UserInfo.
+     */
     @GetMapping("/user/byFirstName")
     @Operation(summary = "Get users by first name.")
     public ResponseEntity<CollectionModel<EntityModel<UserInfo>>> getUserByFirstName(@RequestParam("firstName") String firstName) {
-
         List<EntityModel<UserInfo>> users = StreamSupport.stream(userInfoRepo.findByFirstName(firstName).spliterator(), false)
                 .map(userEntityFactory::toModel).collect(Collectors.toList());
         if (users.size() != 0) {
             return ResponseEntity.ok(CollectionModel.of(users, linkTo(methodOn(BookInfoController.class)
                     .getAllBooks()).withSelfRel()));
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+        } else return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     /**
-     * @param lastName of specific user
-     * @return details of this user if exist or error message if it doesn't.
+     * This method search for users with specific last name.
+     * @param lastName of user
+     * @return CollectionModel of EntityModel of UserInfo.
      */
     @GetMapping("/user/byLastName")
     @Operation(summary = "Get users by last name.")
-    //return only one with this lastName, if there is more than one we get status code 500
+
     public ResponseEntity<CollectionModel<EntityModel<UserInfo>>> getUserByLastName(@RequestParam("lastName") Optional<String> lastName) {
         List<EntityModel<UserInfo>> users = StreamSupport.stream(userInfoRepo.findByLastName(lastName).spliterator(), false)
                 .map(userEntityFactory::toModel).collect(Collectors.toList());
         if (users.size() != 0) {
             return ResponseEntity.ok(CollectionModel.of(users, linkTo(methodOn(BookInfoController.class)
                     .getAllBooks()).withSelfRel()));
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+        } else return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     /**
+     * This method search for user with a specific email address.
      * @param email of specific user
-     * @return details of this user if exist or error message if it doesn't.
+     * @return UserInfo.
      */
     @GetMapping("/user/byEmail/{email}")
     @Operation(summary = "Get user by email.")
@@ -122,14 +117,15 @@ public class UserController {
     }
 
     /**
-     * @param fromDate to search.
-     * @param toDate   to search.
-     * @return Collection<EntityModel < UserInfo>>> of users that was born between (fromDate,toDate).
+     * This method search for all users that was born between range of dates.
+     * @param fromDate represents a lower threshold of dates.
+     * @param toDate   represents an upper threshold of dates.
+     * @return CollectionModel of EntityModel of UserInfo.
      * @throws Exception
      */
     @GetMapping("/users/birthdayDates/betweenDates")
     @Operation(summary = "Get all users that was born between range of dates.", description = "Please enter dates with format: yyyy-mm-dd ")
-    public ResponseEntity<CollectionModel<EntityModel<UserInfo>>> getUserBirthBetweenDates
+    public ResponseEntity<CollectionModel<EntityModel<UserInfo>>> getUserBirthDateBetweenDates
     (@RequestParam("fromDate") @DateTimeFormat(pattern = "yyyy-MM-dd") Date fromDate,
      @RequestParam("toDate") @DateTimeFormat(pattern = "yyyy-MM-dd") Date toDate) throws Exception {
 
@@ -150,19 +146,17 @@ public class UserController {
         if (users.size() != 0) {
             return ResponseEntity.ok(CollectionModel.of(users, linkTo(methodOn(UserController.class)
                     .getAllUsers()).withSelfRel()));
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-
+        } else return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     /**
-     * @param userInfo -details of a new user.
-     * @return status code 201 - create user successfully.
+     * This method add a new user and save it in database.
+     * @param userInfo represent a new user.
+     * @return EntityModel of UserInfo.
      */
     @PostMapping("/users/add")
     @Operation(summary = "Add new user.")
-    public ResponseEntity<EntityModel<UserInfo>> addUser(@RequestBody UserInfo userInfo) {
+    public ResponseEntity<EntityModel<UserInfo>> addUser(@Valid @RequestBody UserInfo userInfo) {
 
         UserInfo savedUser = userInfoRepo.save(userInfo);
         return ResponseEntity.created(linkTo(methodOn(UserController.class)
@@ -172,13 +166,14 @@ public class UserController {
     }
 
     /**
-     * @param firstName of a specific user.
-     * @param lastName  of a specific user.
-     * @return CollectionModel<EntityModel < UserInfo>> with the full name - {firstName+lastName}.
+     * This method search for al users with specific first name and last name.
+     * @param firstName of a user.
+     * @param lastName  of a user.
+     * @return CollectionModel of EntityModel of UserInfo.
      */
     @GetMapping("/users/byFullName")
     @Operation(summary = "Get all users by firstName + lastName.")
-    public ResponseEntity<CollectionModel<EntityModel<UserInfo>>> getuserByFullName(@RequestParam("firstName") String firstName, @RequestParam("lastName") String lastName) {
+    public ResponseEntity<CollectionModel<EntityModel<UserInfo>>> getUserByFullName(@RequestParam("firstName") String firstName, @RequestParam("lastName") String lastName) {
         List<EntityModel<UserInfo>> users = StreamSupport.stream(userInfoRepo.findAll().spliterator(), false)
                 .filter(user -> (Objects.equals(user.getFirstName(), firstName) && Objects.equals(user.getLastName(), lastName)))
                 .map(userEntityFactory::toModel).collect(Collectors.toList());
@@ -191,8 +186,8 @@ public class UserController {
     }
 
     /**
-     *
-     * @return the average age of users.
+     * This method calculate the average age of all users
+     * @return String.
      */
     @GetMapping("/users/averageAge")
     @Operation(summary = "Get average age of users.")
@@ -207,8 +202,8 @@ public class UserController {
     }
 
     /**
-     *
-     * @return the median age of users.
+     * This method calculate the median age of all users.
+     * @return String.
      */
     @GetMapping("/users/medianAge")
     @Operation(summary = "Get median age of users.")
