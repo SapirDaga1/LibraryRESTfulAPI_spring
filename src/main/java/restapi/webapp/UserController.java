@@ -14,13 +14,14 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
+import java.util.Calendar;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @RestController
 public class UserController {
-    int CURRYEAR = 2022;
+    int CURRENT_YEAR = Calendar.getInstance().get(Calendar.YEAR);
 
     private UserInfoRepo userInfoRepo;
     private UserDTOAssembler userDTOFactory;
@@ -79,7 +80,7 @@ public class UserController {
      * @param firstName of user.
      * @return CollectionModel of EntityModel of UserInfo.
      */
-    @GetMapping("/user/byFirstName")
+    @GetMapping("/user/firstname")
     @Operation(summary = "Get users by first name.")
     public ResponseEntity<CollectionModel<EntityModel<UserInfo>>> getUserByFirstName(@RequestParam("firstName") String firstName) {
         List<EntityModel<UserInfo>> users = StreamSupport.stream(userInfoRepo.findByFirstName(firstName).spliterator(), false)
@@ -96,7 +97,7 @@ public class UserController {
      * @param lastName of user
      * @return CollectionModel of EntityModel of UserInfo.
      */
-    @GetMapping("/user/byLastName")
+    @GetMapping("/user/lastname")
     @Operation(summary = "Get users by last name.")
 
     public ResponseEntity<CollectionModel<EntityModel<UserInfo>>> getUserByLastName(@RequestParam("lastName") Optional<String> lastName) {
@@ -114,7 +115,7 @@ public class UserController {
      * @param email of specific user
      * @return UserInfo.
      */
-    @GetMapping("/user/byEmail/{email}")
+    @GetMapping("/user/email/{email}")
     @Operation(summary = "Get user by email.")
     public ResponseEntity<UserInfo> getUserByEmail(@PathVariable("email") String email) {
         return Optional.ofNullable(userInfoRepo.findByEmail(email))
@@ -130,7 +131,7 @@ public class UserController {
      * @return CollectionModel of EntityModel of UserInfo.
      * @throws Exception
      */
-    @GetMapping("/users/birthdayDates/betweenDates")
+    @GetMapping("/users/dates/between-dates")
     @Operation(summary = "Get all users that was born between range of dates.", description = "Please enter dates with format: yyyy-mm-dd ")
     public ResponseEntity<CollectionModel<EntityModel<UserInfo>>> getUserBirthDateBetweenDates
     (@RequestParam("fromDate") @DateTimeFormat(pattern = "yyyy-MM-dd") Date fromDate,
@@ -180,7 +181,7 @@ public class UserController {
      * @param lastName  of a user.
      * @return CollectionModel of EntityModel of UserInfo.
      */
-    @GetMapping("/users/byFullName")
+    @GetMapping("/users/fullname")
     @Operation(summary = "Get all users by firstName + lastName.")
     public ResponseEntity<CollectionModel<EntityModel<UserInfo>>> getUserByFullName(@RequestParam("firstName") String firstName, @RequestParam("lastName") String lastName) {
         List<EntityModel<UserInfo>> users = StreamSupport.stream(userInfoRepo.findAll().spliterator(), false)
@@ -199,13 +200,13 @@ public class UserController {
      *
      * @return String.
      */
-    @GetMapping("/users/averageAge")
+    @GetMapping("/users/mean-age")
     @Operation(summary = "Get average age of users.")
     public ResponseEntity<String> getAvgAge() {
         List<UserInfo> list = StreamSupport.stream(userInfoRepo.findAll().spliterator(), false).collect(Collectors.toList());
         int sum = 0, age = 0;
         for (int i = 0; i < list.size(); i++) {
-            age = CURRYEAR - Integer.parseInt(((list.get(i).getDateOfBirth())).substring(0, 4));
+            age = CURRENT_YEAR - Integer.parseInt(((list.get(i).getDateOfBirth())).substring(0, 4));
             sum += age;
         }
         return ResponseEntity.ok("The average age of users is  " + sum / (list.size()));
@@ -216,13 +217,13 @@ public class UserController {
      *
      * @return String.
      */
-    @GetMapping("/users/medianAge")
+    @GetMapping("/users/median-age")
     @Operation(summary = "Get median age of users.")
     public ResponseEntity<String> getMedianAge() {
         List<UserInfo> list = StreamSupport.stream(userInfoRepo.findAll().spliterator(), false).collect(Collectors.toList());
         int ages[] = new int[list.size()];
         for (int i = 0; i < list.size(); i++) {
-            ages[i] = CURRYEAR - Integer.parseInt(((list.get(i).getDateOfBirth())).substring(0, 4));
+            ages[i] = CURRENT_YEAR - Integer.parseInt(((list.get(i).getDateOfBirth())).substring(0, 4));
         }
         Arrays.sort(ages);
         if (ages.length % 2 == 0)
