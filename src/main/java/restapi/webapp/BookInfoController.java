@@ -31,6 +31,7 @@ public class BookInfoController {
 
     /**
      * This method search for all books from the database.
+     *
      * @return an iterable of BookInfo.
      */
     @GetMapping("/books")
@@ -41,6 +42,7 @@ public class BookInfoController {
 
     /**
      * This method search for a specific book from database by its id.
+     *
      * @param id of a specific book.
      * @return EntityModel of BookInfo.
      */
@@ -56,6 +58,7 @@ public class BookInfoController {
 
     /**
      * This method gives us links of a specific book by its id.
+     *
      * @param id of a specific book.
      * @return EntityModel of BookDTO.
      */
@@ -68,68 +71,73 @@ public class BookInfoController {
 
     /**
      * This method search for all the books that their amount of pages is under the parameter inserted.
+     *
      * @param pages represent an amount of pages to search up to them.
      * @return CollectionModel of EntityModels of BookInfo.
      */
     @GetMapping("/books/underAmountOfPages")
     @Operation(summary = "Get all books with less pages amount than insert from user.")
-    public  ResponseEntity<CollectionModel<EntityModel<BookInfo>>>getBooksUnderPages(@RequestParam int pages) {
+    public ResponseEntity<CollectionModel<EntityModel<BookInfo>>> getBooksUnderPages(@RequestParam int pages) {
         List<EntityModel<BookInfo>> books = bookInfoRepo.findAll()
                 .stream().filter(book -> book.getPageCount() < pages)
                 .map(bookEntityAssembler::toModel).collect(Collectors.toList());
-        if(books.size()!=0) {
+        if (books.size() != 0) {
             return ResponseEntity.ok(CollectionModel.of(books, linkTo(methodOn(BookInfoController.class)
                     .getAllBooks()).withSelfRel()));
-        }else{
+        } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
 
     /**
      * This method search for all the books with specific title.
+     *
      * @param title of a book
      * @return BookInfo.
      */
 
     @GetMapping("/book/title")
     @Operation(summary = "Get book by title")
-    public ResponseEntity<BookInfo> getBookByTitle(@RequestParam("title") String title){
-        BookInfo bookInfo= bookInfoRepo.findByTitle(title);
-        if (bookInfo!=null) {
+    public ResponseEntity<BookInfo> getBookByTitle(@RequestParam("title") String title) {
+        BookInfo bookInfo = bookInfoRepo.findByTitle(title);
+        if (bookInfo != null) {
             return ResponseEntity.ok(bookInfo);
-        }else return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } else return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     /**
      * This method search for a book with specific number of pages.
+     *
      * @param pages represent exact number of pages.
      * @return BookInfo.
      */
     @GetMapping("/book/amountOfPages")
     @Operation(summary = "Get book with specific amount of pages")
-    public ResponseEntity<BookInfo> getBookByCountPages(@RequestParam("pages") int pages){
-        BookInfo bookInfo= bookInfoRepo.findByPageCount(pages);
-        if (bookInfo!=null) {
+    public ResponseEntity<BookInfo> getBookByCountPages(@RequestParam("pages") int pages) {
+        BookInfo bookInfo = bookInfoRepo.findByPageCount(pages);
+        if (bookInfo != null) {
             return ResponseEntity.ok(bookInfo);
-        }else return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } else return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     /**
      * This method search for all the books with specific publisher.
+     *
      * @param publisher of a books.
      * @return CollectionModel of EntityModels of BookInfo.
      */
     @GetMapping("/books/publishedBy/{publisher}")
     @Operation(summary = "Get all books that published by specific publisher.")
     public ResponseEntity<CollectionModel<EntityModel<BookInfo>>> getBookByPublisher(@PathVariable("publisher") String publisher) {
-        List<BookInfo> books=bookInfoRepo.findByPublisher(publisher);
-        if (books.size()!=0) {
+        List<BookInfo> books = bookInfoRepo.findByPublisher(publisher);
+        if (books.size() != 0) {
             return ResponseEntity.ok(bookEntityAssembler.toCollectionModel(books));
-        }else return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } else return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     /**
      * This method delete a book with specific id.
+     *
      * @param id of specific book.
      * @return response of deleting the book.
      * @throws BookNotFoundException if book does not exist.
@@ -148,8 +156,9 @@ public class BookInfoController {
 
     /**
      * This method search for all books in range of pages.
+     *
      * @param fromPages represents a lower threshold of pages.
-     * @param toPages  represents an upper threshold of pages.
+     * @param toPages   represents an upper threshold of pages.
      * @return CollectionModel of EntityModels of BookInfo.
      */
     @GetMapping("/books/betweenPages")
@@ -158,18 +167,19 @@ public class BookInfoController {
         List<EntityModel<BookInfo>> books = bookInfoRepo.findAll()
                 .stream().filter(book -> (book.getPageCount() < toPages && book.getPageCount() > fromPages))
                 .map(bookEntityAssembler::toModel).collect(Collectors.toList());
-        if(books.size()!=0){
+        if (books.size() != 0) {
             return ResponseEntity.ok(CollectionModel.of(books, linkTo(methodOn(BookInfoController.class)
                     .getAllBooks()).withSelfRel()));
-        }else
+        } else
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 
     }
 
     /**
      * This method search for all books in range of pages and sort it by number of pages in ascending order.
+     *
      * @param fromPages represents a lower threshold of pages.
-     * @param toPages  represents an upper threshold of pages.
+     * @param toPages   represents an upper threshold of pages.
      * @return CollectionModel of EntityModels of BookInfo.
      */
     @GetMapping("/books/amountOfPages/sort")
@@ -178,25 +188,26 @@ public class BookInfoController {
         List<EntityModel<BookInfo>> books = bookInfoRepo.findAll()
                 .stream().filter(book -> (book.getPageCount() < toPages && book.getPageCount() > fromPages))
                 .sorted().map(bookEntityAssembler::toModel).collect(Collectors.toList());
-        if(books.size()!=0) {
+        if (books.size() != 0) {
             return ResponseEntity.ok(CollectionModel.of(books, linkTo(methodOn(BookInfoController.class)
                     .getAllBooks()).withSelfRel()));
-        }else return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } else return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 
     }
 
     /**
      * This method search for all books that published between range of dates.
+     *
      * @param fromDate represents starting date to search from it.
-     * @param toDate represent last date to search to it.
+     * @param toDate   represent last date to search to it.
      * @return CollectionModel of EntityModels of BookInfo.
      * @throws Exception
      */
     @GetMapping("/books/betweenDates")
-    @Operation(summary = "Get all books that was published between range of dates",description = "Please enter dates with format: yyyy-mm-dd ")
+    @Operation(summary = "Get all books that was published between range of dates", description = "Please enter dates with format: yyyy-mm-dd ")
     public ResponseEntity<CollectionModel<EntityModel<BookInfo>>> getBooksBetweenDates
     (@RequestParam("fromDate") @DateTimeFormat(pattern = "yyyy-MM-dd") Date fromDate,
-     @RequestParam("toDate") @DateTimeFormat(pattern = "yyyy-MM-dd") Date toDate) throws Exception{
+     @RequestParam("toDate") @DateTimeFormat(pattern = "yyyy-MM-dd") Date toDate) throws Exception {
 
         //this is the format of the date we want to use(filter the date of book from database to this format)
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
@@ -204,27 +215,29 @@ public class BookInfoController {
         List<EntityModel<BookInfo>> books = bookInfoRepo.findAll()
                 .stream().filter(book -> {
                     try {
-                        return (format.parse(book.getPublishedDate()).getTime()>= fromDate.getTime() &&
-                                format.parse(book.getPublishedDate()).getTime()<= toDate.getTime());
+                        return (format.parse(book.getPublishedDate()).getTime() >= fromDate.getTime() &&
+                                format.parse(book.getPublishedDate()).getTime() <= toDate.getTime());
                     } catch (ParseException e) {
                         e.printStackTrace();
-                    }return false;
+                    }
+                    return false;
                 })
                 .map(bookEntityAssembler::toModel).collect(Collectors.toList());
-        if (books.size()!=0) {
+        if (books.size() != 0) {
             return ResponseEntity.ok(CollectionModel.of(books, linkTo(methodOn(BookInfoController.class)
                     .getAllBooks()).withSelfRel()));
-        }else return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } else return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     /**
      * This method search for all books that published by specific publisher after specific date.
+     *
      * @param publisher represent a specific publisher.
      * @param afterDate represent date to start search from.
      * @return CollectionModel of EntityModels of BookInfo.
      */
     @GetMapping("/books/byPublisher/afterDate")
-    @Operation(summary = "Get all books that published by specific publisher after specific date.",description = "Please enter dates with format: yyyy-mm-dd ")
+    @Operation(summary = "Get all books that published by specific publisher after specific date.", description = "Please enter dates with format: yyyy-mm-dd ")
     public ResponseEntity<CollectionModel<EntityModel<BookInfo>>> getByPublisherAndDate(@RequestParam("publisher") String publisher,
                                                                                         @RequestParam("afterDate") @DateTimeFormat(pattern = "yyyy-MM-dd") Date afterDate) {
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
@@ -239,10 +252,10 @@ public class BookInfoController {
                     return false;
                 })
                 .sorted().map(bookEntityAssembler::toModel).collect(Collectors.toList());
-        if (books.size()!=0) {
+        if (books.size() != 0) {
             return ResponseEntity.ok(CollectionModel.of(books, linkTo(methodOn(BookInfoController.class)
                     .getAllBooks()).withSelfRel()));
-        }else return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } else return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 }
 

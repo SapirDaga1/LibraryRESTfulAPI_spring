@@ -11,7 +11,7 @@ public class UserAdvice {
     @ResponseBody
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(UserNotFoundException.class)
-    String userNotFoundHandler(UserNotFoundException userNotFoundException){
+    String userNotFoundHandler(UserNotFoundException userNotFoundException) {
         return userNotFoundException.getMessage();
     }
 }

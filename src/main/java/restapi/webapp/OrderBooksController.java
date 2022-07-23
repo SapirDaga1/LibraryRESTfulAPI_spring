@@ -34,6 +34,7 @@ public class OrderBooksController {
 
     /**
      * This method search for all orders from database.
+     *
      * @return an Iterable of orders.
      */
     @GetMapping("/orders")
@@ -44,6 +45,7 @@ public class OrderBooksController {
 
     /**
      * This method search for a specific order from database by its id.
+     *
      * @param id of specific order.
      * @return EntityModel of OrderBooks.
      */
@@ -59,6 +61,7 @@ public class OrderBooksController {
 
     /**
      * This method search for all orders with specific city to delivery.
+     *
      * @param city represent city to delivery of order.
      * @return CollectionModel of EntityModels of OrderBooks.
      */
@@ -78,6 +81,7 @@ public class OrderBooksController {
 
     /**
      * This method search for all orders with exact price of order.
+     *
      * @param price represent price to pay of order.
      * @return CollectionModel of EntityModels of OrderBooks.
      */
@@ -95,6 +99,7 @@ public class OrderBooksController {
 
     /**
      * This method search for all orders that was done by specific date.
+     *
      * @param date represent date of order.
      * @return CollectionModel of EntityModels of OrderBooks.
      */
@@ -112,6 +117,7 @@ public class OrderBooksController {
 
     /**
      * This method gives us links of a specific order by its id.
+     *
      * @param id of a specific order.
      * @return EntityModel of OrderBooks.
      */
@@ -124,6 +130,7 @@ public class OrderBooksController {
 
     /**
      * This method search for all orders between range of prices.
+     *
      * @param fromPrice represents a lower threshold of prices.
      * @param toPrice   represents an upper threshold of prices.
      * @return CollectionModel of EntityModels of OrderBooks.
@@ -142,6 +149,7 @@ public class OrderBooksController {
 
     /**
      * This method add a new order and save it in database.
+     *
      * @param order represent a new order.
      * @return EntityModel of OrderBooks.
      */
@@ -157,6 +165,7 @@ public class OrderBooksController {
 
     /**
      * This method search for all orders that was done between range of dates.
+     *
      * @param fromDate represents a lower threshold of dates.
      * @param toDate   represents an upper threshold of dates.
      * @return CollectionModel of EntityModels of OrderBooks.
@@ -165,8 +174,8 @@ public class OrderBooksController {
     @GetMapping("/order/betweenDates")
     @Operation(summary = "Get all orders in range of dates.")
     public ResponseEntity<CollectionModel<EntityModel<OrderBooks>>> getOrdersBetweenDates
-            (@RequestParam("fromDate") @DateTimeFormat(pattern = "yyyy-MM-dd") Date fromDate,
-             @RequestParam("toDate") @DateTimeFormat(pattern = "yyyy-MM-dd") Date toDate) throws Exception {
+    (@RequestParam("fromDate") @DateTimeFormat(pattern = "yyyy-MM-dd") Date fromDate,
+     @RequestParam("toDate") @DateTimeFormat(pattern = "yyyy-MM-dd") Date toDate) throws Exception {
 
         //this is the format of the date we want to use(filter the date of order)
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
@@ -191,6 +200,7 @@ public class OrderBooksController {
 
     /**
      * This method search for orders with less or equal number of books in order.
+     *
      * @param numberOfBooks represents a number of books in order.
      * @return CollectionModel of EntityModels of OrderBooks.
      */
@@ -210,6 +220,7 @@ public class OrderBooksController {
 
     /**
      * This method search for the city with the most of the deliveries above 100 Shekels.
+     *
      * @return list of Strings.
      */
     @GetMapping("/orders/maxDeliveryCity")

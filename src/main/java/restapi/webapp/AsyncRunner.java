@@ -15,10 +15,11 @@ public class AsyncRunner implements CommandLineRunner {
     private static final Logger classLogger = LoggerFactory.getLogger(AsyncRunner.class);
     private BookInfoRepo bookInfoRepo;
 
-    public AsyncRunner(UserService userService,BookInfoRepo bookInfoRepo){
-        this.userService=userService;
-        this.bookInfoRepo=bookInfoRepo;
+    public AsyncRunner(UserService userService, BookInfoRepo bookInfoRepo) {
+        this.userService = userService;
+        this.bookInfoRepo = bookInfoRepo;
     }
+
     @Override
     public void run(String... args) throws Exception {
         CompletableFuture<BookInfo> bookInfo1 = userService.getDataFromApi("LbnwCQAAQBAJ");
@@ -28,7 +29,7 @@ public class AsyncRunner implements CommandLineRunner {
         CompletableFuture<BookInfo> bookInfo5 = userService.getDataFromApi("5Tr1jwEACAAJ");
         CompletableFuture<BookInfo> bookInfo6 = userService.getDataFromApi("AN36DwAAQBAJ");
 
-        CompletableFuture<BookInfo>[] taskArray =  new CompletableFuture[6];
+        CompletableFuture<BookInfo>[] taskArray = new CompletableFuture[6];
 
         taskArray[0] = bookInfo1;
         taskArray[1] = bookInfo2;
@@ -45,7 +46,7 @@ public class AsyncRunner implements CommandLineRunner {
         BookInfo newBookInfo5 = bookInfo5.get();
         BookInfo newBookInfo6 = bookInfo6.get();
 
-        CompletableFuture.allOf(bookInfo1,bookInfo2,bookInfo3,bookInfo4,bookInfo5,bookInfo6).join();
+        CompletableFuture.allOf(bookInfo1, bookInfo2, bookInfo3, bookInfo4, bookInfo5, bookInfo6).join();
         bookInfoRepo.save(newBookInfo1);
         bookInfoRepo.save(newBookInfo2);
         bookInfoRepo.save(newBookInfo3);

@@ -11,7 +11,7 @@ public class OrderAdvice {
     @ResponseBody
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(OrderNotFoundException.class)
-    String orderNotFoundHandler(OrderNotFoundException orderNotFoundException){
+    String orderNotFoundHandler(OrderNotFoundException orderNotFoundException) {
         return orderNotFoundException.getMessage();
     }
 }

@@ -13,7 +13,8 @@ import javax.persistence.OneToOne;
 @Data
 @NoArgsConstructor
 public class UserInfo {
-    private @Id @GeneratedValue
+    private @Id
+    @GeneratedValue
     Long id;
     private String email;
     private String firstName;
@@ -22,13 +23,13 @@ public class UserInfo {
     private String city;
     private String dateOfBirth;
 
-    public UserInfo(String email, String firstName, String lastName, String phoneNumber,String city,String dateOfBirth) {
+    public UserInfo(String email, String firstName, String lastName, String phoneNumber, String city, String dateOfBirth) {
         this.email = email;
         this.firstName = firstName;
         this.lastName = lastName;
         this.phoneNumber = phoneNumber;
-        this.city=city;
-        this.dateOfBirth=dateOfBirth;
+        this.city = city;
+        this.dateOfBirth = dateOfBirth;
     }
 
     @JsonIgnore
