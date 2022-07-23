@@ -52,11 +52,8 @@ public class OrderBooksController {
     @GetMapping("/order/{id}")
     @Operation(summary = "Get a specific order by id.")
     public EntityModel<OrderBooks> getSpecificOrder(@PathVariable Long id) {
-        OrderBooks booksOrder = booksOrderRepo.findById(id).orElseThrow(() ->
-                new OrderNotFoundException(id));
-        return EntityModel.of(booksOrder,
-                linkTo(methodOn(OrderBooksController.class).getSpecificOrder(id)).withSelfRel(),
-                linkTo(methodOn(OrderBooksController.class).getAllOrders()).withRel("back to all orders"));
+        OrderBooks booksOrder = booksOrderRepo.findById(id).orElseThrow(() -> new OrderNotFoundException(id));
+        return EntityModel.of(booksOrder, linkTo(methodOn(OrderBooksController.class).getSpecificOrder(id)).withSelfRel(), linkTo(methodOn(OrderBooksController.class).getAllOrders()).withRel("back to all orders"));
     }
 
     /**
@@ -69,11 +66,9 @@ public class OrderBooksController {
     @Operation(summary = "Get all orders with specific city to delivery.")
     public ResponseEntity<CollectionModel<EntityModel<OrderBooks>>> getByCityDelivery(@PathVariable("city") String city) {
 
-        List<EntityModel<OrderBooks>> books = StreamSupport.stream(booksOrderRepo.findByCityOfDelivery(city).spliterator(), false)
-                .map(orderBooksEntityAssembler::toModel).collect(Collectors.toList());
+        List<EntityModel<OrderBooks>> books = StreamSupport.stream(booksOrderRepo.findByCityOfDelivery(city).spliterator(), false).map(orderBooksEntityAssembler::toModel).collect(Collectors.toList());
         if (books.size() != 0) {
-            return ResponseEntity.ok(CollectionModel.of(books, linkTo(methodOn(OrderBooksController.class)
-                    .getAllOrders()).withSelfRel()));
+            return ResponseEntity.ok(CollectionModel.of(books, linkTo(methodOn(OrderBooksController.class).getAllOrders()).withSelfRel()));
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 
@@ -89,11 +84,9 @@ public class OrderBooksController {
     @Operation(summary = "Get all orders with exact price to pay.")
     public ResponseEntity<CollectionModel<EntityModel<OrderBooks>>> getByPrice(@PathVariable("price") int price) {
 
-        List<EntityModel<OrderBooks>> books = StreamSupport.stream(booksOrderRepo.findByPrice(price).spliterator(), false)
-                .map(orderBooksEntityAssembler::toModel).collect(Collectors.toList());
+        List<EntityModel<OrderBooks>> books = StreamSupport.stream(booksOrderRepo.findByPrice(price).spliterator(), false).map(orderBooksEntityAssembler::toModel).collect(Collectors.toList());
         if (books.size() != 0) {
-            return ResponseEntity.ok(CollectionModel.of(books, linkTo(methodOn(OrderBooksController.class)
-                    .getAllOrders()).withSelfRel()));
+            return ResponseEntity.ok(CollectionModel.of(books, linkTo(methodOn(OrderBooksController.class).getAllOrders()).withSelfRel()));
         } else return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
@@ -107,11 +100,9 @@ public class OrderBooksController {
     @Operation(summary = "Get all orders that was done by specific date.")
     public ResponseEntity<CollectionModel<EntityModel<OrderBooks>>> getOrdersByOrderDate(@RequestParam("date") String date) {
 
-        List<EntityModel<OrderBooks>> orders = StreamSupport.stream(booksOrderRepo.findByDateOfOrder(date).spliterator(), false)
-                .map(orderBooksEntityAssembler::toModel).collect(Collectors.toList());
+        List<EntityModel<OrderBooks>> orders = StreamSupport.stream(booksOrderRepo.findByDateOfOrder(date).spliterator(), false).map(orderBooksEntityAssembler::toModel).collect(Collectors.toList());
         if (orders.size() != 0) {
-            return ResponseEntity.ok(CollectionModel.of(orders, linkTo(methodOn(OrderBooksController.class)
-                    .getAllOrders()).withSelfRel()));
+            return ResponseEntity.ok(CollectionModel.of(orders, linkTo(methodOn(OrderBooksController.class).getAllOrders()).withSelfRel()));
         } else return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
@@ -124,8 +115,7 @@ public class OrderBooksController {
     @GetMapping("/order/{id}/links")
     @Operation(summary = "Get a specific order by id.")
     public ResponseEntity<EntityModel<OrderBooks>> getOrderLinks(@PathVariable Long id) {
-        return booksOrderRepo.findById(id).map(OrderBooks::new).map(orderBooksEntityAssembler::toModel)
-                .map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
+        return booksOrderRepo.findById(id).map(OrderBooks::new).map(orderBooksEntityAssembler::toModel).map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
     }
 
     /**
@@ -138,12 +128,9 @@ public class OrderBooksController {
     @GetMapping("/order/betweenPrices")
     @Operation(summary = "Get all orders in range of price to pay.")
     public ResponseEntity<CollectionModel<EntityModel<OrderBooks>>> getOrdersBetweenPrices(@RequestParam int fromPrice, @RequestParam int toPrice) {
-        List<EntityModel<OrderBooks>> orders = StreamSupport.stream(booksOrderRepo.findAll().spliterator(), false)
-                .filter(order -> (order.getPrice() <= toPrice && order.getPrice() >= fromPrice))
-                .map(orderBooksEntityAssembler::toModel).collect(Collectors.toList());
+        List<EntityModel<OrderBooks>> orders = StreamSupport.stream(booksOrderRepo.findAll().spliterator(), false).filter(order -> (order.getPrice() <= toPrice && order.getPrice() >= fromPrice)).map(orderBooksEntityAssembler::toModel).collect(Collectors.toList());
         if (orders.size() != 0) {
-            return ResponseEntity.ok(CollectionModel.of(orders, linkTo(methodOn(OrderBooksController.class)
-                    .getAllOrders()).withSelfRel()));
+            return ResponseEntity.ok(CollectionModel.of(orders, linkTo(methodOn(OrderBooksController.class).getAllOrders()).withSelfRel()));
         } else return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
@@ -158,9 +145,7 @@ public class OrderBooksController {
     public ResponseEntity<EntityModel<OrderBooks>> addOrder(@Valid @RequestBody OrderBooks order) {
 
         OrderBooks newOrder = booksOrderRepo.save(order);
-        return ResponseEntity.created(linkTo(methodOn(OrderBooksController.class)
-                        .getSpecificOrder(newOrder.getId())).toUri())
-                .body(orderBooksEntityAssembler.toModel(newOrder));
+        return ResponseEntity.created(linkTo(methodOn(OrderBooksController.class).getSpecificOrder(newOrder.getId())).toUri()).body(orderBooksEntityAssembler.toModel(newOrder));
     }
 
     /**
@@ -173,27 +158,21 @@ public class OrderBooksController {
      */
     @GetMapping("/order/betweenDates")
     @Operation(summary = "Get all orders in range of dates.")
-    public ResponseEntity<CollectionModel<EntityModel<OrderBooks>>> getOrdersBetweenDates
-    (@RequestParam("fromDate") @DateTimeFormat(pattern = "yyyy-MM-dd") Date fromDate,
-     @RequestParam("toDate") @DateTimeFormat(pattern = "yyyy-MM-dd") Date toDate) throws Exception {
+    public ResponseEntity<CollectionModel<EntityModel<OrderBooks>>> getOrdersBetweenDates(@RequestParam("fromDate") @DateTimeFormat(pattern = "yyyy-MM-dd") Date fromDate, @RequestParam("toDate") @DateTimeFormat(pattern = "yyyy-MM-dd") Date toDate) throws Exception {
 
         //this is the format of the date we want to use(filter the date of order)
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 
-        List<EntityModel<OrderBooks>> books = StreamSupport.stream(booksOrderRepo.findAll().spliterator(), false)
-                .filter(book -> {
-                    try {
-                        return (format.parse(book.getDateOfOrder()).getTime() >= fromDate.getTime() &&
-                                format.parse(book.getDateOfOrder()).getTime() <= toDate.getTime());
-                    } catch (ParseException e) {
-                        e.printStackTrace();
-                    }
-                    return false;
-                })
-                .map(orderBooksEntityAssembler::toModel).collect(Collectors.toList());
+        List<EntityModel<OrderBooks>> books = StreamSupport.stream(booksOrderRepo.findAll().spliterator(), false).filter(book -> {
+            try {
+                return (format.parse(book.getDateOfOrder()).getTime() >= fromDate.getTime() && format.parse(book.getDateOfOrder()).getTime() <= toDate.getTime());
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            return false;
+        }).map(orderBooksEntityAssembler::toModel).collect(Collectors.toList());
         if (books.size() != 0) {
-            return ResponseEntity.ok(CollectionModel.of(books, linkTo(methodOn(OrderBooksController.class)
-                    .getAllOrders()).withSelfRel()));
+            return ResponseEntity.ok(CollectionModel.of(books, linkTo(methodOn(OrderBooksController.class).getAllOrders()).withSelfRel()));
         } else return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 
     }
@@ -207,16 +186,11 @@ public class OrderBooksController {
     @GetMapping("/orders/numberOfBooks")
     @Operation(summary = "Get all books with up to number of books list.")
     public ResponseEntity<CollectionModel<EntityModel<OrderBooks>>> getOrderWithLessThan(@RequestParam("numberOfBooks") int numberOfBooks) {
-        List<EntityModel<OrderBooks>> books = StreamSupport.stream(booksOrderRepo.findAll().spliterator(), false)
-                .filter(book -> book.getBooksList().size() <= numberOfBooks)
-                .map(orderBooksEntityAssembler::toModel).collect(Collectors.toList());
+        List<EntityModel<OrderBooks>> books = StreamSupport.stream(booksOrderRepo.findAll().spliterator(), false).filter(book -> book.getBooksList().size() <= numberOfBooks).map(orderBooksEntityAssembler::toModel).collect(Collectors.toList());
         if (books.size() != 0) {
-            return ResponseEntity.ok(CollectionModel.of(books, linkTo(methodOn(OrderBooksController.class)
-                    .getAllOrders()).withSelfRel()));
+            return ResponseEntity.ok(CollectionModel.of(books, linkTo(methodOn(OrderBooksController.class).getAllOrders()).withSelfRel()));
         } else return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
-
-    //TODO: fix this method,need to handle with case pf some cities with max deliveries...
 
     /**
      * This method search for the city with the most of the deliveries above 100 Shekels.
@@ -225,31 +199,20 @@ public class OrderBooksController {
      */
     @GetMapping("/orders/maxDeliveryCity")
     @Operation(summary = "Get the city with the most deliveries above 100 Shekels..")
-    public String getCityWithMaxDelivery() {
+    public List<String> getCityWithMaxDelivery() {
         Map<String, Integer> cityCount = new HashMap<>();
-        List<OrderBooks> list = StreamSupport.stream(booksOrderRepo.findAll().spliterator(), false)
-                .filter(order -> order.getPrice() >= 100).collect(Collectors.toList());
-        //handling with counter...
-        int count = 0;
-        for (int i = 0; i < list.size(); i++) {
-            cityCount.put(list.get(i).getCityOfDelivery(), 0);
-        }
-        System.out.println(cityCount);
-        for (int i = 0; i < list.size(); i++) {
-            if (cityCount.values().contains(list.get(i).getCityOfDelivery())) {
-                cityCount.put(list.get(i).getCityOfDelivery(), count++);
-            } else {
-                count = 0;
-                cityCount.put(list.get(i).getCityOfDelivery(), count++);
-            }
-            System.out.println(cityCount);
-            int maxValue = (Collections.max(cityCount.values()));
-            for (Map.Entry<String, Integer> map : cityCount.entrySet()) {
-                if (map.getValue() == maxValue)
-                    return map.getKey();
-            }
+        List<String> citiesWithMaxDeliveries = new ArrayList<>();
+        List<OrderBooks> list = StreamSupport.stream(booksOrderRepo.findAll().spliterator(), false).filter(order -> order.getPrice() >= 100).collect(Collectors.toList());
 
+        for (int i = 0; i < list.size(); i++) {
+            int deliveriesInCity = cityCount.containsKey(list.get(i).getCityOfDelivery()) ? cityCount.get(list.get(i).getCityOfDelivery()) + 1 : 1;
+            cityCount.put(list.get(i).getCityOfDelivery(), deliveriesInCity);
         }
-        return "none";
+
+        int maxValue = (Collections.max(cityCount.values()));
+        for (Map.Entry<String, Integer> map : cityCount.entrySet()) {
+            if (map.getValue() == maxValue) citiesWithMaxDeliveries.add(map.getKey());
+        }
+        return citiesWithMaxDeliveries;
     }
 }
