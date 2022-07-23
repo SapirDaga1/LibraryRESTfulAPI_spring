@@ -40,13 +40,13 @@ public class Store {
                     (new UserInfo("RotemCo@gmail.com","Rotem","Cohen","0507897897","Rishon-Le Zion","2002-03-01")));
 
             logger.info("logging " + booksOrderRepo.save
-                    (new OrderBooks(new ArrayList<>(Arrays.asList(bookInfo1,bookInfo2)),"2022-5-12","Tel-Aviv",
-                           userInfoRepo.save(new UserInfo("natan@gmail.com","natan","dillbary","0505666666","Bat-Yam","1985-08-28")),50 )));
+                    (new OrderBooks(new ArrayList<>(Arrays.asList(bookInfo1,bookInfo2)),"2022-5-12","Bat-Yam",
+                           userInfoRepo.save(new UserInfo("natan@gmail.com","natan","dillbary","0505666666","Bat-Yam","1985-08-28")),150 )));
             logger.info("logging " + booksOrderRepo.save
-                    (new OrderBooks(new ArrayList<>(Arrays.asList(bookInfo3,bookInfo4,bookInfo5,bookInfo6)),"2022-05-24","Ashkelon",
+                    (new OrderBooks(new ArrayList<>(Arrays.asList(bookInfo3,bookInfo4,bookInfo5,bookInfo6)),"2022-05-24","Tel-Aviv",
                             userInfoRepo.save(new UserInfo("helen@gmail.com","Helen","Cohen","0520505051","Ashkelon","1991-06-29")),200 )));logger.info("logging " + booksOrderRepo.save
-                    (new OrderBooks(new ArrayList<>(Arrays.asList(bookInfo1,bookInfo3,bookInfo6)),"2022-02-24","Eilat",
-                            userInfoRepo.save(new UserInfo("noa@gmail.com","Noa","Cohen","0544449999","Eilat","1968-11-16")),65 )));
+                    (new OrderBooks(new ArrayList<>(Arrays.asList(bookInfo1,bookInfo3,bookInfo6)),"2022-02-24","Ashkelon",
+                            userInfoRepo.save(new UserInfo("noa@gmail.com","Noa","Cohen","0544449999","Eilat","1968-11-16")),165 )));
 
 
         };

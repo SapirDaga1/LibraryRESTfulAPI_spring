@@ -9,7 +9,7 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @Component
-public class UserDTOFactory implements SimpleRepresentationModelAssembler<UserDTO> {
+public class UserDTOAssembler implements SimpleRepresentationModelAssembler<UserDTO> {
 
     @Override
     public void addLinks(EntityModel<UserDTO> resource) {

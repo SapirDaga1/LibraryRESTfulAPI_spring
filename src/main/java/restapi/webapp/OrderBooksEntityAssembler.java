@@ -4,8 +4,8 @@ import org.springframework.stereotype.Component;
 
 @Component
 // HATEOAS factory that converts BooksOrder objects into EntityModel<BooksOrder> objects.
-public class OrderBooksEntityFactory extends SimpleIdentifiableRepresentationModelAssembler<OrderBooks> {
-    public OrderBooksEntityFactory() {
+public class OrderBooksEntityAssembler extends SimpleIdentifiableRepresentationModelAssembler<OrderBooks> {
+    public OrderBooksEntityAssembler() {
         super(OrderBooksController.class);
     }
 }

@@ -11,7 +11,6 @@ import java.util.*;
 
 /**
  * This class represent metadata of a book.
- * It's the strong entity - without books we cannot make orders or borrows.
  */
 @Data
 @Entity
