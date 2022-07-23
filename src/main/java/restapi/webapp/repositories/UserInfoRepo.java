@@ -1,9 +1,7 @@
-package restapi.webapp;
+package restapi.webapp.repositories;
 
 import org.springframework.data.repository.CrudRepository;
-import org.springframework.hateoas.CollectionModel;
-import org.springframework.hateoas.EntityModel;
-import org.springframework.http.ResponseEntity;
+import restapi.webapp.entities.UserInfo;
 
 import java.util.List;
 import java.util.Optional;

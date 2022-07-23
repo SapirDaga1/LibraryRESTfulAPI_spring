@@ -1,10 +1,7 @@
-package restapi.webapp;
+package restapi.webapp.repositories;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.hateoas.CollectionModel;
-import org.springframework.hateoas.EntityModel;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestParam;
+import restapi.webapp.entities.BookInfo;
 
 import java.util.List;
 

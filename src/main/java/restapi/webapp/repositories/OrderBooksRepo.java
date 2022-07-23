@@ -1,8 +1,7 @@
-package restapi.webapp;
+package restapi.webapp.repositories;
 
-import org.aspectj.weaver.ast.Or;
-import org.hibernate.criterion.Order;
 import org.springframework.data.repository.CrudRepository;
+import restapi.webapp.entities.OrderBooks;
 
 import java.util.List;
 
