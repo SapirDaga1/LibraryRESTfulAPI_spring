@@ -14,7 +14,7 @@ public class BookAdvice {
     @ResponseBody
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(BookNotFoundException.class)
-    String bookNotFoundHandler(BookNotFoundException bookNotFoundException){
+    String bookNotFoundHandler(BookNotFoundException bookNotFoundException) {
         return bookNotFoundException.getMessage();
     }
 }

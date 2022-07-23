@@ -35,6 +35,7 @@ public class UserController {
 
     /**
      * This method search for all users from the database.
+     *
      * @return an iterable of UserInfo.
      */
     @GetMapping("/users")
@@ -45,6 +46,7 @@ public class UserController {
 
     /**
      * This method search for a specific user from database by its id.
+     *
      * @param id of a specific user.
      * @return EntityModel of UserInfo.
      */
@@ -60,6 +62,7 @@ public class UserController {
 
     /**
      * This method gives us links of a specific user by its id.
+     *
      * @param id of a specific user.
      * @return EntityModel of UserDTO.
      */
@@ -72,6 +75,7 @@ public class UserController {
 
     /**
      * This method search for users with specific first name.
+     *
      * @param firstName of user.
      * @return CollectionModel of EntityModel of UserInfo.
      */
@@ -88,6 +92,7 @@ public class UserController {
 
     /**
      * This method search for users with specific last name.
+     *
      * @param lastName of user
      * @return CollectionModel of EntityModel of UserInfo.
      */
@@ -105,6 +110,7 @@ public class UserController {
 
     /**
      * This method search for user with a specific email address.
+     *
      * @param email of specific user
      * @return UserInfo.
      */
@@ -118,6 +124,7 @@ public class UserController {
 
     /**
      * This method search for all users that was born between range of dates.
+     *
      * @param fromDate represents a lower threshold of dates.
      * @param toDate   represents an upper threshold of dates.
      * @return CollectionModel of EntityModel of UserInfo.
@@ -151,6 +158,7 @@ public class UserController {
 
     /**
      * This method add a new user and save it in database.
+     *
      * @param userInfo represent a new user.
      * @return EntityModel of UserInfo.
      */
@@ -167,6 +175,7 @@ public class UserController {
 
     /**
      * This method search for al users with specific first name and last name.
+     *
      * @param firstName of a user.
      * @param lastName  of a user.
      * @return CollectionModel of EntityModel of UserInfo.
@@ -187,6 +196,7 @@ public class UserController {
 
     /**
      * This method calculate the average age of all users
+     *
      * @return String.
      */
     @GetMapping("/users/averageAge")
@@ -203,6 +213,7 @@ public class UserController {
 
     /**
      * This method calculate the median age of all users.
+     *
      * @return String.
      */
     @GetMapping("/users/medianAge")
@@ -214,9 +225,10 @@ public class UserController {
             ages[i] = CURRYEAR - Integer.parseInt(((list.get(i).getDateOfBirth())).substring(0, 4));
         }
         Arrays.sort(ages);
-        if (ages.length % 2 == 0) return  ResponseEntity.ok("The median age of users is:"+ (((double) ages[ages.length / 2] + (double) ages[ages.length / 2 - 1]) / 2));
+        if (ages.length % 2 == 0)
+            return ResponseEntity.ok("The median age of users is:" + (((double) ages[ages.length / 2] + (double) ages[ages.length / 2 - 1]) / 2));
         else
-            return ResponseEntity.ok("The median age of users is:"+(double) ages[ages.length / 2]);
+            return ResponseEntity.ok("The median age of users is:" + (double) ages[ages.length / 2]);
 
     }
 }

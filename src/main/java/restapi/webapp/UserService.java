@@ -24,18 +24,20 @@ public class UserService {
     public UserService(RestTemplateBuilder restTemplateBuilder) {
         this.restTemplate = restTemplateBuilder.build();
     }
+
     /**
      * This method should run asynchronously in order to get
      * information about a specific book - using @Async annotation and CompletableFuture
      * Our program needs to send an HTTP GET request to a remote REST endpoint
      * we ought to get a JSON representing the book.
+     *
      * @param volumeID
      * @return
      */
     @Async
-    public CompletableFuture<BookInfo> getDataFromApi(String volumeID){
-        String urlTemplate = String.format("https://www.googleapis.com/books/v1/volumes/%s",volumeID);
-        BookInfo bookInfo = this.restTemplate.getForObject(urlTemplate,BookInfo.class);
+    public CompletableFuture<BookInfo> getDataFromApi(String volumeID) {
+        String urlTemplate = String.format("https://www.googleapis.com/books/v1/volumes/%s", volumeID);
+        BookInfo bookInfo = this.restTemplate.getForObject(urlTemplate, BookInfo.class);
 
         /*
          return a CompletableFuture<BookInfo> when the computation is done
