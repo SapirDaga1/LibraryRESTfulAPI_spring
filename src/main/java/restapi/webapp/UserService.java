@@ -31,12 +31,12 @@ public class UserService {
      * Our program needs to send an HTTP GET request to a remote REST endpoint
      * we ought to get a JSON representing the book.
      *
-     * @param volumeID
+     * @param title
      * @return
      */
     @Async
-    public CompletableFuture<BookInfo> getDataFromApi(String volumeID) {
-        String urlTemplate = String.format("https://www.googleapis.com/books/v1/volumes/%s", volumeID);
+    public CompletableFuture<BookInfo> getDataFromApi(String title) {
+        String urlTemplate = String.format("https://www.googleapis.com/books/v1/volumes/%s", title);
         BookInfo bookInfo = this.restTemplate.getForObject(urlTemplate, BookInfo.class);
 
         /*
