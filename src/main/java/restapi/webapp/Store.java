@@ -48,7 +48,9 @@ public class Store {
             logger.info("logging " + booksOrderRepo.save
                     (new OrderBooks(new ArrayList<>(Arrays.asList(bookInfo1, bookInfo3, bookInfo6)), "2022-02-24", "Ashkelon",
                             userInfoRepo.save(new UserInfo("noa@gmail.com", "Noa", "Cohen", "0544449999", "Eilat", "1968-11-16")), 165)));
-
+            logger.info("logging " + booksOrderRepo.save
+                    (new OrderBooks(new ArrayList<>(Arrays.asList(bookInfo2, bookInfo3, bookInfo6)), "2022-07-24", "Tel-Aviv",
+                            userInfoRepo.save(new UserInfo("noa@gmail.com", "Noa", "Cohen", "0544449999", "Eilat", "1968-11-16")), 195)));
 
         };
     }
