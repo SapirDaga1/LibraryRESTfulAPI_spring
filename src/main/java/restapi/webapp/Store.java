@@ -19,14 +19,14 @@ public class Store {
     @Bean
     CommandLineRunner initDataBase(BookInfoRepo bookInfoRepo, OrderBooksRepo booksOrderRepo, UserInfoRepo userInfoRepo) {
 
-        BookInfo bookInfo1 = new BookInfo("LbnwCQAAQBAJ", "Harry Potter", "McFarland", "2015-06-11", 150, "en", "0.2.2.0.preview.0");
-        BookInfo bookInfo2 = new BookInfo("LbnwCQAAQBAJ", "Harry Potter5", "McFarland", "2017-06-11", 450, "en", "0.1.2.0.preview.0");
+        BookInfo bookInfo1 = new BookInfo("Harry Potter", "L18VBQAAQBAJ", new ArrayList<>(), "McFarland", "2015-06-11", 150, "en", "0.2.2.0.preview.0");
+        BookInfo bookInfo2 = new BookInfo("Harry Potter5", "x4beDQAAQBAJ", new ArrayList<>(), "McFarland", "2017-06-11", 450, "en", "0.1.2.0.preview.0");
+        BookInfo bookInfo3 = new BookInfo("Black Beauty", "y9gQgJ_YJzIC",  new ArrayList<>(), "Anna Sewell", "1999-06-23", 186, "en", "0.1.0.0.preview.1");
+        BookInfo bookInfo4 = new BookInfo("A Novel in Linocuts", "HUpKDAAAQBAJ", new ArrayList<>(), "Courier Dover Publications", "2016-09-21", 144, "en", "0.2.0.0.preview.1");
+        BookInfo bookInfo5 = new BookInfo("Serious Games", "nQ7pDAAAQBAJ", new ArrayList<>(), "Routledge", "2009-09-10", 552, "en", "1.1.2.0.preview.3");
+        BookInfo bookInfo6 = new BookInfo("Disney Princess: Book of Secrets", "8tTVDwAAQBAJ",  new ArrayList<>(), "Studio Fun International", "2020-03-10", 44, "en", "preview-1.0.0");
         bookInfoRepo.save(bookInfo1);
         bookInfoRepo.save(bookInfo2);
-        BookInfo bookInfo3 = new BookInfo("CMBYDwAAQBAJ", "Black Beauty", "Anna Sewell", "1999-06-23", 186, "en", "0.1.0.0.preview.1");
-        BookInfo bookInfo4 = new BookInfo("HUpKDAAAQBAJ", "A Novel in Linocuts", "Courier Dover Publications", "2016-09-21", 144, "en", "0.2.0.0.preview.1");
-        BookInfo bookInfo5 = new BookInfo("3HWQAgAAQBAJ", "Serious Games", "Routledge", "2009-09-10", 552, "en", "1.1.2.0.preview.3");
-        BookInfo bookInfo6 = new BookInfo("8tTVDwAAQBAJ", "Disney Princess: Book of Secrets", "Studio Fun International", "2020-03-10", 44, "en", "preview-1.0.0");
         bookInfoRepo.save(bookInfo3);
         bookInfoRepo.save(bookInfo4);
         bookInfoRepo.save(bookInfo5);

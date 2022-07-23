@@ -4,6 +4,7 @@ import ch.qos.logback.core.util.SystemInfo;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.client.RestTemplate;
 
 import java.security.SignedObject;
@@ -31,14 +32,14 @@ public class UserService {
      * Our program needs to send an HTTP GET request to a remote REST endpoint
      * we ought to get a JSON representing the book.
      *
-     * @param volumeID
+     * @param title
      * @return
      */
     @Async
-    public CompletableFuture<BookInfo> getDataFromApi(String volumeID) {
-        String urlTemplate = String.format("https://www.googleapis.com/books/v1/volumes/%s", volumeID);
+    public CompletableFuture<BookInfo> getDataFromApi(String title) {
+        String urlTemplate = String.format("https://www.googleapis.com/books/v1/volumes?q=%s", title);
         BookInfo bookInfo = this.restTemplate.getForObject(urlTemplate, BookInfo.class);
-
+        bookInfo.getTitle();
         /*
          return a CompletableFuture<BookInfo> when the computation is done
          this goes hand-with-hand with the join() method

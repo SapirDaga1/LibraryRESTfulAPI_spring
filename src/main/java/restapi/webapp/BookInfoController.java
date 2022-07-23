@@ -6,7 +6,10 @@ import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
@@ -14,19 +17,24 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
 
 
 @RestController
+@EnableAsync
 public class BookInfoController {
     private BookInfoRepo bookInfoRepo;
     private BookEntityAssembler bookEntityAssembler;
     private BookDTOAssembler bookDTOAssembler;
+    private UserService userService;
 
-    public BookInfoController(BookInfoRepo bookInfoRepo, BookEntityAssembler bookEntityAssembler, BookDTOAssembler bookDTOAssembler) {
+    public BookInfoController(BookInfoRepo bookInfoRepo, BookEntityAssembler bookEntityAssembler, BookDTOAssembler bookDTOAssembler, UserService userService) {
         this.bookInfoRepo = bookInfoRepo;
         this.bookEntityAssembler = bookEntityAssembler;
         this.bookDTOAssembler = bookDTOAssembler;
+        this.userService = userService;
     }
 
     /**
@@ -55,6 +63,19 @@ public class BookInfoController {
                 linkTo(methodOn(BookInfoController.class).getSpecificBook(id)).withSelfRel(),
                 linkTo(methodOn(BookInfoController.class).getAllBooks()).withRel("back to all books"));
     }
+
+
+    @PostMapping("/book/add")
+    @Operation(summary = "Add new book to store.")
+    public ResponseEntity<EntityModel<BookInfo>> addNewBook(@Valid @RequestBody String newBook) throws ExecutionException, InterruptedException {
+        CompletableFuture<BookInfo> bookInfo = userService.getDataFromApi(newBook);
+
+        BookInfo book = bookInfoRepo.save((BookInfo) bookInfo.get());
+        return ResponseEntity.created(linkTo(methodOn(BookInfoController.class)
+                        .getSpecificBook(book.getBookID())).toUri())
+                .body(bookEntityAssembler.toModel(book));
+    }
+
 
     /**
      * This method gives us links of a specific book by its id.
