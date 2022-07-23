@@ -75,7 +75,7 @@ public class BookInfoController {
      * @param pages represent an amount of pages to search up to them.
      * @return CollectionModel of EntityModels of BookInfo.
      */
-    @GetMapping("/books/underAmountOfPages")
+    @GetMapping("/books/under-pages")
     @Operation(summary = "Get all books with less pages amount than insert from user.")
     public ResponseEntity<CollectionModel<EntityModel<BookInfo>>> getBooksUnderPages(@RequestParam int pages) {
         List<EntityModel<BookInfo>> books = bookInfoRepo.findAll()
@@ -111,7 +111,7 @@ public class BookInfoController {
      * @param pages represent exact number of pages.
      * @return BookInfo.
      */
-    @GetMapping("/book/amountOfPages")
+    @GetMapping("/book/amount-pages")
     @Operation(summary = "Get book with specific amount of pages")
     public ResponseEntity<BookInfo> getBookByCountPages(@RequestParam("pages") int pages) {
         BookInfo bookInfo = bookInfoRepo.findByPageCount(pages);
@@ -126,7 +126,7 @@ public class BookInfoController {
      * @param publisher of a books.
      * @return CollectionModel of EntityModels of BookInfo.
      */
-    @GetMapping("/books/publishedBy/{publisher}")
+    @GetMapping("/books/publisher/{publisher}")
     @Operation(summary = "Get all books that published by specific publisher.")
     public ResponseEntity<CollectionModel<EntityModel<BookInfo>>> getBookByPublisher(@PathVariable("publisher") String publisher) {
         List<BookInfo> books = bookInfoRepo.findByPublisher(publisher);
@@ -161,7 +161,7 @@ public class BookInfoController {
      * @param toPages   represents an upper threshold of pages.
      * @return CollectionModel of EntityModels of BookInfo.
      */
-    @GetMapping("/books/betweenPages")
+    @GetMapping("/books/between-pages")
     @Operation(summary = "Get all books in range of amount of pages.")
     public ResponseEntity<CollectionModel<EntityModel<BookInfo>>> getBooksBetweenPages(@RequestParam int fromPages, @RequestParam int toPages) {
         List<EntityModel<BookInfo>> books = bookInfoRepo.findAll()
@@ -182,7 +182,7 @@ public class BookInfoController {
      * @param toPages   represents an upper threshold of pages.
      * @return CollectionModel of EntityModels of BookInfo.
      */
-    @GetMapping("/books/amountOfPages/sort")
+    @GetMapping("/books/amount-pages/sort")
     @Operation(summary = "Get all books in range of amount of pages sorted.")
     public ResponseEntity<CollectionModel<EntityModel<BookInfo>>> getBooksSort(@RequestParam int fromPages, @RequestParam int toPages) {
         List<EntityModel<BookInfo>> books = bookInfoRepo.findAll()
@@ -203,7 +203,7 @@ public class BookInfoController {
      * @return CollectionModel of EntityModels of BookInfo.
      * @throws Exception
      */
-    @GetMapping("/books/betweenDates")
+    @GetMapping("/books/between-dates")
     @Operation(summary = "Get all books that was published between range of dates", description = "Please enter dates with format: yyyy-mm-dd ")
     public ResponseEntity<CollectionModel<EntityModel<BookInfo>>> getBooksBetweenDates
     (@RequestParam("fromDate") @DateTimeFormat(pattern = "yyyy-MM-dd") Date fromDate,
@@ -236,7 +236,7 @@ public class BookInfoController {
      * @param afterDate represent date to start search from.
      * @return CollectionModel of EntityModels of BookInfo.
      */
-    @GetMapping("/books/byPublisher/afterDate")
+    @GetMapping("/books/publisher/date")
     @Operation(summary = "Get all books that published by specific publisher after specific date.", description = "Please enter dates with format: yyyy-mm-dd ")
     public ResponseEntity<CollectionModel<EntityModel<BookInfo>>> getByPublisherAndDate(@RequestParam("publisher") String publisher,
                                                                                         @RequestParam("afterDate") @DateTimeFormat(pattern = "yyyy-MM-dd") Date afterDate) {
