@@ -69,7 +69,8 @@ public class BookInfoController {
     @Operation(summary = "Add new book to store.")
     public ResponseEntity<EntityModel<BookInfo>> addNewBook(@Valid @RequestBody String newBook) throws ExecutionException, InterruptedException {
         CompletableFuture<BookInfo> bookInfo = userService.getDataFromApi(newBook);
-        BookInfo book = bookInfoRepo.save(bookInfo.get());
+
+        BookInfo book = bookInfoRepo.save((BookInfo) bookInfo.get());
         return ResponseEntity.created(linkTo(methodOn(BookInfoController.class)
                         .getSpecificBook(book.getBookID())).toUri())
                 .body(bookEntityAssembler.toModel(book));
