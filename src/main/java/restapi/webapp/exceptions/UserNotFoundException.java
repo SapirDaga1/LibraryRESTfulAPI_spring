@@ -1,4 +1,4 @@
-package restapi.webapp;
+package restapi.webapp.exceptions;
 
 import java.util.Optional;
 

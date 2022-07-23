@@ -1,4 +1,4 @@
-package restapi.webapp;
+package restapi.webapp.controllers;
 
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -7,6 +7,12 @@ import org.springframework.hateoas.EntityModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import restapi.webapp.assemblers.UserDTOAssembler;
+import restapi.webapp.assemblers.UserEntityAssembler;
+import restapi.webapp.dto.UserDTO;
+import restapi.webapp.entities.UserInfo;
+import restapi.webapp.exceptions.UserNotFoundException;
+import restapi.webapp.repositories.UserInfoRepo;
 
 import javax.validation.Valid;
 import java.text.ParseException;
@@ -24,13 +30,13 @@ public class UserController {
     int CURRENT_YEAR = Calendar.getInstance().get(Calendar.YEAR);
 
     private UserInfoRepo userInfoRepo;
-    private UserDTOAssembler userDTOFactory;
-    private UserEntityAssembler userEntityFactory;
+    private UserDTOAssembler userDTOAssembler;
+    private UserEntityAssembler userEntityAssembler;
 
-    public UserController(UserInfoRepo userInfoRepo, UserDTOAssembler userDTOFactory, UserEntityAssembler userEntityFactory) {
+    public UserController(UserInfoRepo userInfoRepo, UserDTOAssembler userDTOAssembler, UserEntityAssembler userEntityAssembler) {
         this.userInfoRepo = userInfoRepo;
-        this.userDTOFactory = userDTOFactory;
-        this.userEntityFactory = userEntityFactory;
+        this.userDTOAssembler = userDTOAssembler;
+        this.userEntityAssembler = userEntityAssembler;
 
     }
 
@@ -70,7 +76,7 @@ public class UserController {
     @GetMapping("/user/{id}/links")
     @Operation(summary = "Get links of a specific user by id.")
     public ResponseEntity<EntityModel<UserDTO>> userDetails(@PathVariable Long id) {
-        return userInfoRepo.findById(id).map(UserDTO::new).map(userDTOFactory::toModel)
+        return userInfoRepo.findById(id).map(UserDTO::new).map(userDTOAssembler::toModel)
                 .map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
     }
 
@@ -84,7 +90,7 @@ public class UserController {
     @Operation(summary = "Get users by first name.")
     public ResponseEntity<CollectionModel<EntityModel<UserInfo>>> getUserByFirstName(@RequestParam("firstName") String firstName) {
         List<EntityModel<UserInfo>> users = StreamSupport.stream(userInfoRepo.findByFirstName(firstName).spliterator(), false)
-                .map(userEntityFactory::toModel).collect(Collectors.toList());
+                .map(userEntityAssembler::toModel).collect(Collectors.toList());
         if (users.size() != 0) {
             return ResponseEntity.ok(CollectionModel.of(users, linkTo(methodOn(BookInfoController.class)
                     .getAllBooks()).withSelfRel()));
@@ -102,7 +108,7 @@ public class UserController {
 
     public ResponseEntity<CollectionModel<EntityModel<UserInfo>>> getUserByLastName(@RequestParam("lastName") Optional<String> lastName) {
         List<EntityModel<UserInfo>> users = StreamSupport.stream(userInfoRepo.findByLastName(lastName).spliterator(), false)
-                .map(userEntityFactory::toModel).collect(Collectors.toList());
+                .map(userEntityAssembler::toModel).collect(Collectors.toList());
         if (users.size() != 0) {
             return ResponseEntity.ok(CollectionModel.of(users, linkTo(methodOn(BookInfoController.class)
                     .getAllBooks()).withSelfRel()));
@@ -150,7 +156,7 @@ public class UserController {
                     }
                     return false;
                 })
-                .map(userEntityFactory::toModel).collect(Collectors.toList());
+                .map(userEntityAssembler::toModel).collect(Collectors.toList());
         if (users.size() != 0) {
             return ResponseEntity.ok(CollectionModel.of(users, linkTo(methodOn(UserController.class)
                     .getAllUsers()).withSelfRel()));
@@ -170,7 +176,7 @@ public class UserController {
         UserInfo savedUser = userInfoRepo.save(userInfo);
         return ResponseEntity.created(linkTo(methodOn(UserController.class)
                         .getSpecificUser(savedUser.getId())).toUri())
-                .body(userEntityFactory.toModel(savedUser));
+                .body(userEntityAssembler.toModel(savedUser));
 
     }
 
@@ -186,7 +192,7 @@ public class UserController {
     public ResponseEntity<CollectionModel<EntityModel<UserInfo>>> getUserByFullName(@RequestParam("firstName") String firstName, @RequestParam("lastName") String lastName) {
         List<EntityModel<UserInfo>> users = StreamSupport.stream(userInfoRepo.findAll().spliterator(), false)
                 .filter(user -> (Objects.equals(user.getFirstName(), firstName) && Objects.equals(user.getLastName(), lastName)))
-                .map(userEntityFactory::toModel).collect(Collectors.toList());
+                .map(userEntityAssembler::toModel).collect(Collectors.toList());
         if (users.size() != 0) {
             return ResponseEntity.ok(CollectionModel.of(users, linkTo(methodOn(UserController.class)
                     .getAllUsers()).withSelfRel()));

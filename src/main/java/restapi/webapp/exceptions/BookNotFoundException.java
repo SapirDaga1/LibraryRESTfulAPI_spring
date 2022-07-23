@@ -1,4 +1,4 @@
-package restapi.webapp;
+package restapi.webapp.exceptions;
 
 public class BookNotFoundException extends RuntimeException {
     public BookNotFoundException(Long id) {

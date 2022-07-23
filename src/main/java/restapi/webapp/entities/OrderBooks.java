@@ -1,4 +1,4 @@
-package restapi.webapp;
+package restapi.webapp.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;

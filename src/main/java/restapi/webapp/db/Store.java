@@ -1,10 +1,16 @@
-package restapi.webapp;
+package restapi.webapp.db;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import restapi.webapp.entities.BookInfo;
+import restapi.webapp.entities.OrderBooks;
+import restapi.webapp.entities.UserInfo;
+import restapi.webapp.repositories.BookInfoRepo;
+import restapi.webapp.repositories.OrderBooksRepo;
+import restapi.webapp.repositories.UserInfoRepo;
 
 import java.util.*;
 

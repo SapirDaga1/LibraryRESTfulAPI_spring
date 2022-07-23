@@ -1,8 +1,9 @@
-package restapi.webapp;
+package restapi.webapp.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import restapi.webapp.entities.OrderBooks;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
