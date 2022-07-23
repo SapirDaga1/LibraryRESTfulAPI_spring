@@ -19,9 +19,10 @@ import java.util.*;
 public class BookInfo implements Comparable<BookInfo> {
 
     private @Id
-    @GeneratedValue Long bookID; //book id as we create
-    private String id; // book id from the api
+    @GeneratedValue Long bookID;
     private String title;
+    @ElementCollection
+    private List<String> authors = new ArrayList<>();
     private String publisher;
     private String publishedDate;
     private int pageCount;
@@ -32,9 +33,9 @@ public class BookInfo implements Comparable<BookInfo> {
     @ManyToMany(mappedBy = "booksList")
     private List<OrderBooks> booksOrders = new ArrayList<>();
 
-    public BookInfo(String id, String title, String publisher, String publishedDate, int pageCount, String language, String contentVersion) {
-        this.id = id;
+    public BookInfo(String title, List<String> authors, String publisher, String publishedDate, int pageCount, String language, String contentVersion) {
         this.title = title;
+        this.authors = authors;
         this.publisher = publisher;
         this.publishedDate = publishedDate;
         this.pageCount = pageCount;
@@ -46,13 +47,17 @@ public class BookInfo implements Comparable<BookInfo> {
     @JsonProperty("volumeInfo")
     private void unpackedVolumeInfo(Map<String, Object> volumeInfo) {
         this.title = (String) volumeInfo.get("title");
+        this.authors = (List<String>) volumeInfo.get("authors");
         this.publisher = (String) volumeInfo.get("publisher");
         this.publishedDate = (String) volumeInfo.get("publishedDate");
         this.pageCount = (int) volumeInfo.get("pageCount");
         this.language = (String) volumeInfo.get("language");
         this.contentVersion = (String) volumeInfo.get("contentVersion");
     }
-
+    @JsonProperty("items")
+    private void unpackedItems(List<Map<String, Object>> items) {
+        unpackedVolumeInfo((Map<String, Object>) items.get(0).get("volumeInfo"));
+    }
     @Override
     public int compareTo(BookInfo otherBook) {
         return Double.compare(this.getPageCount(), otherBook.getPageCount());

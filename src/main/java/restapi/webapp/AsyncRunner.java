@@ -22,12 +22,12 @@ public class AsyncRunner implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        CompletableFuture<BookInfo> bookInfo1 = userService.getDataFromApi("LbnwCQAAQBAJ");
-        CompletableFuture<BookInfo> bookInfo2 = userService.getDataFromApi("TMS8tQEACAAJ");
-        CompletableFuture<BookInfo> bookInfo3 = userService.getDataFromApi("X2QEAAAAMBAJ");
-        CompletableFuture<BookInfo> bookInfo4 = userService.getDataFromApi("2wgyBgAAQBAJ");
-        CompletableFuture<BookInfo> bookInfo5 = userService.getDataFromApi("5Tr1jwEACAAJ");
-        CompletableFuture<BookInfo> bookInfo6 = userService.getDataFromApi("AN36DwAAQBAJ");
+        CompletableFuture<BookInfo> bookInfo1 = userService.getDataFromApi("Report");
+        CompletableFuture<BookInfo> bookInfo2 = userService.getDataFromApi("Minnesota Rules of Court");
+        CompletableFuture<BookInfo> bookInfo3 = userService.getDataFromApi("The Psychology of Harry Potter");
+        CompletableFuture<BookInfo> bookInfo4 = userService.getDataFromApi("Common Stocks and Common Sense");
+        CompletableFuture<BookInfo> bookInfo5 = userService.getDataFromApi("Getting Rich with Low-priced Stocks");
+        CompletableFuture<BookInfo> bookInfo6 = userService.getDataFromApi("Profits from Penny Stocks");
 
         CompletableFuture<BookInfo>[] taskArray = new CompletableFuture[6];
 

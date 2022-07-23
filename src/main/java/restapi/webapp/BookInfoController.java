@@ -1,12 +1,12 @@
 package restapi.webapp;
 
 import io.swagger.v3.oas.annotations.Operation;
-import org.apache.logging.log4j.util.PerformanceSensitive;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -18,20 +18,23 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
 
 
 @RestController
+@EnableAsync
 public class BookInfoController {
     private BookInfoRepo bookInfoRepo;
     private BookEntityAssembler bookEntityAssembler;
     private BookDTOAssembler bookDTOAssembler;
     private UserService userService;
 
-    public BookInfoController(BookInfoRepo bookInfoRepo, BookEntityAssembler bookEntityAssembler, BookDTOAssembler bookDTOAssembler) {
+    public BookInfoController(BookInfoRepo bookInfoRepo, BookEntityAssembler bookEntityAssembler, BookDTOAssembler bookDTOAssembler, UserService userService) {
         this.bookInfoRepo = bookInfoRepo;
         this.bookEntityAssembler = bookEntityAssembler;
         this.bookDTOAssembler = bookDTOAssembler;
+        this.userService = userService;
     }
 
     /**
@@ -61,12 +64,15 @@ public class BookInfoController {
                 linkTo(methodOn(BookInfoController.class).getAllBooks()).withRel("back to all books"));
     }
 
+
     @PostMapping("/book/add")
     @Operation(summary = "Add new book to store.")
-    public ResponseEntity<EntityModel<BookInfo>> addNewBook(@Valid @RequestBody String newBook){
-        CompletableFuture<BookInfo> bookInfo= userService.getDataFromApi(newBook);
-
-        bookInfoRepo.save(bookInfo);
+    public ResponseEntity<EntityModel<BookInfo>> addNewBook(@Valid @RequestBody String newBook) throws ExecutionException, InterruptedException {
+        CompletableFuture<BookInfo> bookInfo = userService.getDataFromApi(newBook);
+        BookInfo book = bookInfoRepo.save(bookInfo.get());
+        return ResponseEntity.created(linkTo(methodOn(BookInfoController.class)
+                        .getSpecificBook(book.getBookID())).toUri())
+                .body(bookEntityAssembler.toModel(book));
     }
 
 
