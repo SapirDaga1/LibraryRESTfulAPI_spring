@@ -1,6 +1,7 @@
 # LibraryRESTfulAPI_spring
 
 This project is Library that implemented by spring and Restful arichtecture.
+
 You can add user to system, order book and also order book are not in the library.
  
 ## Class diagram
@@ -10,7 +11,7 @@ You can add user to system, order book and also order book are not in the librar
 ## How to run the project
 1. Make sure you have Spring installed in you machine
 2. Clone the project ```git clone https://github.com/SapirDaga1/LibraryRESTfulAPI_spring.git```
-3. Run the program form `WebappApplication.java`
+3. Run the program form ```WebappApplication.java```
 
 [Swagger UI](http://localhost:8080/swagger-ui/index.html#/)
 
